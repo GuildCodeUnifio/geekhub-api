@@ -1,0 +1,9 @@
+{
+  "name": "GeekHub API",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "forwardPorts": [8080, 3306],
+  "postCreateCommand": "/bin/bash .devcontainer/init-mysql.sh",
+  "postStartCommand": "service mysql start"
+}
