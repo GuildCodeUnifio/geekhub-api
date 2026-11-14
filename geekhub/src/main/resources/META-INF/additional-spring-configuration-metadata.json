@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "jwt.public.key",
+      "type": "org.springframework.core.io.Resource",
+      "description": "Chave pública RSA utilizada para validar os tokens JWT."
+    },
+    {
+      "name": "jwt.private.key",
+      "type": "org.springframework.core.io.Resource",
+      "description": "Chave privada RSA utilizada para assinar os tokens JWT."
+    }
+  ]
+}
