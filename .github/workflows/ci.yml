@@ -1,0 +1,38 @@
+name: CI — Testes e Cobertura JaCoCo (100%)
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'geekhub/pom.xml'
+      - 'geekhub/src/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'geekhub/pom.xml'
+      - 'geekhub/src/**'
+
+jobs:
+  testes-unitarios-jacoco:
+    name: Testes Unitários + JaCoCo 100%
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: geekhub
+
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'maven'
+          cache-dependency-path: 'geekhub/pom.xml'
+
+      - name: Executar testes unitários e validar 100% de cobertura JaCoCo
+        run: ./mvnw -B test
