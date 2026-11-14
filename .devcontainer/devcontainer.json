@@ -4,6 +4,26 @@
     "dockerfile": "Dockerfile"
   },
   "forwardPorts": [8080, 3306],
-  "postCreateCommand": "/bin/bash .devcontainer/init-mysql.sh",
-  "postStartCommand": "service mysql start"
+  "portsAttributes": {
+    "8080": {
+      "label": "GeekHub API"
+    },
+    "3306": {
+      "label": "MySQL"
+    }
+  },
+  "postCreateCommand": "sed -i 's/\\r$//' .devcontainer/init-mysql.sh && /bin/bash .devcontainer/init-mysql.sh",
+  "postStartCommand": "/bin/bash .devcontainer/init-mysql.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-azuretools.vscode-docker",
+        "vscjava.vscode-java-pack",
+        "vmware.vscode-spring-boot",
+        "vscjava.vscode-spring-initializr",
+        "vscjava.vscode-spring-boot-dashboard",
+        "cweijan.vscode-mysql-client2"
+      ]
+    }
+  }
 }
