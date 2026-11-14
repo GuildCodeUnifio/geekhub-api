@@ -28,8 +28,10 @@ CHARACTER SET utf8mb4
 COLLATE utf8mb4_unicode_ci;
 
 CREATE USER IF NOT EXISTS 'geekhub'@'%' IDENTIFIED BY 'geekhub';
+CREATE USER IF NOT EXISTS 'geekhub'@'localhost' IDENTIFIED BY 'geekhub';
 
 GRANT ALL PRIVILEGES ON ecommerce.* TO 'geekhub'@'%';
+GRANT ALL PRIVILEGES ON ecommerce.* TO 'geekhub'@'localhost';
 
 FLUSH PRIVILEGES;
 EOF
