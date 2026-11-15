@@ -99,4 +99,22 @@ public class Pedido {
                 .ocorridoEm(ocorridoEm)
                 .build());
     }
+
+    public Integer calcularQuantidadeItens() {
+
+        return this.itens.stream()
+                .map(ItemPedido::getQuantidade)
+                .reduce(0, Integer::sum);
+    }
+
+    public Boolean pertenceAoComprador(Long usuarioId) {
+
+        return this.comprador.getId().equals(usuarioId);
+    }
+
+    public Boolean possuiVendedor(Long vendedorId) {
+
+        return this.itens.stream()
+                .anyMatch(item -> item.getVendedorId().equals(vendedorId));
+    }
 }

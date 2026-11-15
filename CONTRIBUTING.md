@@ -92,4 +92,4 @@ Antes de codificar, consulte o guia completo em [AGENTS.md](AGENTS.md). Pontos e
    .\mvnw.cmd test   # Windows
    ```
 2. Confirme em `geekhub/target/site/jacoco/jacoco.csv` que todas as classes em `service`, `validator`, `mapper` e `GlobalExceptionHandler` estão com **100% de cobertura** (`0` misses).
-3. Atualize e valide o JSON de `geekhub/postman/geekhub.postman_collection.json` (1 pasta por recurso, 1 request por ação e 3 exemplos de resposta por request).
+3. Atualize e valide o JSON de `postman/geekhub.postman_collection.json` (1 pasta por recurso, 1 request por ação e 3 exemplos de resposta por request).

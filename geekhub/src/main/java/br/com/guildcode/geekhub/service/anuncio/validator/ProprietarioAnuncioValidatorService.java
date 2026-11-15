@@ -18,11 +18,10 @@ public class ProprietarioAnuncioValidatorService {
 
     public void validarProprietarioOuAdmin(Anuncio anuncio, Usuario usuarioAutenticado) {
 
-        Boolean ehProprietario = anuncio.getVendedor().getId().equals(usuarioAutenticado.getId());
-        Boolean ehAdmin = usuarioAutenticado.getPermissoes().stream()
-                .anyMatch(permissao -> "ADMIN".equals(permissao.getNome()));
+        Boolean isProprietario = anuncio.getVendedor().getId().equals(usuarioAutenticado.getId());
+        Boolean isAdmin = usuarioAutenticado.isAdmin();
 
-        if (!ehProprietario && !ehAdmin) {
+        if (!isProprietario && !isAdmin) {
 
             throw new AccessDeniedException("Você não possui permissão para remover este anúncio");
         }

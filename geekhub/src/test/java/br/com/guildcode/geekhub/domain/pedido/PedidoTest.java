@@ -11,6 +11,8 @@ import java.util.List;
 
 import static br.com.guildcode.geekhub.domain.pedido.enums.EstadoPedido.CONFIRMADO;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PedidoTest {
 
@@ -51,5 +53,40 @@ class PedidoTest {
         assertEquals(2, pedido.getHistorico().size());
         assertEquals(CONFIRMADO, pedido.getHistorico().getLast().getEstado());
         assertEquals(momentoEvento, pedido.getHistorico().getLast().getOcorridoEm());
+    }
+
+    @Test
+    @DisplayName("Deve calcular quantidade total de unidades somando todos os itens do pedido")
+    void deveCalcularQuantidadeTotalDeItens() {
+        // Arrange
+        Pedido pedido = PedidoFactory.get();
+        ItemPedido itemExtra = ItemPedido.builder()
+                .anuncioId(2L)
+                .vendedorId(3L)
+                .nomeProduto("Mangá Colecionável")
+                .precoUnitario(new BigDecimal("49.90"))
+                .quantidade(2)
+                .subtotal(new BigDecimal("99.80"))
+                .build();
+        pedido.setItens(new ArrayList<>(List.of(pedido.getItens().getFirst(), itemExtra)));
+
+        // Act
+        Integer quantidadeItens = pedido.calcularQuantidadeItens();
+
+        // Assert
+        assertEquals(3, quantidadeItens);
+    }
+
+    @Test
+    @DisplayName("Deve identificar corretamente se usuário é comprador ou vendedor participante do pedido")
+    void deveIdentificarCompradorEVendedorDoPedido() {
+        // Arrange
+        Pedido pedido = PedidoFactory.get();
+
+        // Act & Assert
+        assertTrue(pedido.pertenceAoComprador(1L));
+        assertFalse(pedido.pertenceAoComprador(50L));
+        assertTrue(pedido.possuiVendedor(2L));
+        assertFalse(pedido.possuiVendedor(50L));
     }
 }

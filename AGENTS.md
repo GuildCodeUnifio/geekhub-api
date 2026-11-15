@@ -120,7 +120,7 @@ br.com.guildcode.geekhub/
 
 ## 6. Collection do Postman
 
-- Arquivo: `geekhub/postman/geekhub.postman_collection.json`.
+- Arquivo: `postman/geekhub.postman_collection.json`.
 - Estrutura: **1 pasta por recurso** (`usuarios`, `login`, ...), **1 request por endpoint** e **no mínimo 3 exemplos salvos (`response`)** por request (1 sucesso + 2 erros principais, podendo incluir exemplos extras em endpoints de pesquisa/filtros).
 - URLs de imagem de exemplo usam `https://picsum.photos/200`.
 
