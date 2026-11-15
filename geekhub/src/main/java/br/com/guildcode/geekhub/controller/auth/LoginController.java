@@ -1,7 +1,7 @@
 package br.com.guildcode.geekhub.controller.auth;
 
-import br.com.guildcode.geekhub.controller.auth.request.LoginRequest;
-import br.com.guildcode.geekhub.controller.auth.response.LoginResponse;
+import br.com.guildcode.geekhub.controller.auth.dto.request.LoginRequest;
+import br.com.guildcode.geekhub.controller.auth.dto.response.LoginResponse;
 import br.com.guildcode.geekhub.openapi.auth.LoginControllerOpenApi;
 import br.com.guildcode.geekhub.service.auth.LoginService;
 import jakarta.validation.Valid;

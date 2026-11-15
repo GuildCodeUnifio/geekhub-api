@@ -1,6 +1,6 @@
 package br.com.guildcode.geekhub.mapper.usuario;
 
-import br.com.guildcode.geekhub.controller.usuario.response.ListarUsuarioResponse;
+import br.com.guildcode.geekhub.controller.usuario.dto.response.ListarUsuarioResponse;
 import br.com.guildcode.geekhub.domain.usuario.Usuario;
 import br.com.guildcode.geekhub.factory.usuario.UsuarioFactory;
 import org.junit.jupiter.api.DisplayName;

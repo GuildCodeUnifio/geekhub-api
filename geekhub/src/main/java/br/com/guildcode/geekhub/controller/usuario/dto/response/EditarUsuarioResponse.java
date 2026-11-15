@@ -1,11 +1,11 @@
-package br.com.guildcode.geekhub.controller.usuario.response;
+package br.com.guildcode.geekhub.controller.usuario.dto.response;
 
 import lombok.Builder;
 
 import java.time.LocalDateTime;
 
 @Builder
-public record DetalharUsuarioResponse(
+public record EditarUsuarioResponse(
 
         Long id,
         String nome,

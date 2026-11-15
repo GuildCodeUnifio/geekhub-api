@@ -1,11 +1,11 @@
 package br.com.guildcode.geekhub.openapi.usuario;
 
-import br.com.guildcode.geekhub.controller.usuario.request.CadastrarUsuarioRequest;
-import br.com.guildcode.geekhub.controller.usuario.request.EditarUsuarioRequest;
-import br.com.guildcode.geekhub.controller.usuario.response.CadastrarUsuarioResponse;
-import br.com.guildcode.geekhub.controller.usuario.response.DetalharUsuarioResponse;
-import br.com.guildcode.geekhub.controller.usuario.response.EditarUsuarioResponse;
-import br.com.guildcode.geekhub.controller.usuario.response.ListarUsuarioResponse;
+import br.com.guildcode.geekhub.controller.usuario.dto.request.CadastrarUsuarioRequest;
+import br.com.guildcode.geekhub.controller.usuario.dto.request.EditarUsuarioRequest;
+import br.com.guildcode.geekhub.controller.usuario.dto.response.CadastrarUsuarioResponse;
+import br.com.guildcode.geekhub.controller.usuario.dto.response.DetalharUsuarioResponse;
+import br.com.guildcode.geekhub.controller.usuario.dto.response.EditarUsuarioResponse;
+import br.com.guildcode.geekhub.controller.usuario.dto.response.ListarUsuarioResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

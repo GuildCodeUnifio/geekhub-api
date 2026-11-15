@@ -1,6 +1,6 @@
 package br.com.guildcode.geekhub.validator.usuario;
 
-import br.com.guildcode.geekhub.controller.usuario.request.EditarUsuarioRequest;
+import br.com.guildcode.geekhub.controller.usuario.dto.request.EditarUsuarioRequest;
 import br.com.guildcode.geekhub.exception.NegocioException;
 import br.com.guildcode.geekhub.factory.usuario.EditarUsuarioRequestFactory;
 import org.junit.jupiter.api.DisplayName;

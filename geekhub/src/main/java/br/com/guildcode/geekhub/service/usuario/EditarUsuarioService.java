@@ -1,7 +1,7 @@
 package br.com.guildcode.geekhub.service.usuario;
 
-import br.com.guildcode.geekhub.controller.usuario.request.EditarUsuarioRequest;
-import br.com.guildcode.geekhub.controller.usuario.response.EditarUsuarioResponse;
+import br.com.guildcode.geekhub.controller.usuario.dto.request.EditarUsuarioRequest;
+import br.com.guildcode.geekhub.controller.usuario.dto.response.EditarUsuarioResponse;
 import br.com.guildcode.geekhub.domain.usuario.Usuario;
 import br.com.guildcode.geekhub.mapper.usuario.EditarUsuarioMapper;
 import br.com.guildcode.geekhub.repository.usuario.UsuarioRepository;
