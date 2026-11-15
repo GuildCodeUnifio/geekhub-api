@@ -18,9 +18,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
+import static java.math.RoundingMode.HALF_UP;
 
 @Entity
 @Table(
@@ -56,4 +58,11 @@ public class ItemCarrinho {
 
     @Column(name = "criado_em", nullable = false)
     private LocalDateTime criadoEm;
+
+    public BigDecimal calcularSubtotal() {
+
+        return this.anuncio.getPreco()
+                .multiply(BigDecimal.valueOf(this.quantidade))
+                .setScale(2, HALF_UP);
+    }
 }
