@@ -2506,6 +2506,612 @@
           ]
         }
       ]
+    },
+    {
+      "name": "carrinho",
+      "item": [
+        {
+          "name": "adicionarItem",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"anuncioId\": 1,\n  \"quantidade\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/carrinho/itens",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "carrinho",
+                "itens"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "201 Created (item adicionado ao carrinho)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"anuncioId\": 1,\n  \"quantidade\": 2\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/carrinho/itens",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "carrinho",
+                    "itens"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 2,\n  \"anuncioId\": 1,\n  \"nomeProduto\": \"Action figure Naruto 1ª edição\",\n  \"precoUnitario\": 1850.00,\n  \"quantidade\": 2,\n  \"subtotal\": 3700.00,\n  \"criadoEm\": \"2026-11-15T19:00:00.000000\"\n}"
+            },
+            {
+              "name": "201 Created (quantidade acumulada em item existente)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"anuncioId\": 2,\n  \"quantidade\": 1\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/carrinho/itens",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "carrinho",
+                    "itens"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 1,\n  \"anuncioId\": 2,\n  \"nomeProduto\": \"Mangá Colecionável — Edição Especial\",\n  \"precoUnitario\": 49.90,\n  \"quantidade\": 3,\n  \"subtotal\": 149.70,\n  \"criadoEm\": \"2026-11-13T18:20:00.000000\"\n}"
+            },
+            {
+              "name": "400 Bad Request (anuncio indisponivel ou sem estoque)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"anuncioId\": 5,\n  \"quantidade\": 1\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/carrinho/itens",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "carrinho",
+                    "itens"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"timestamp\": \"2026-11-15T19:00:00.000000\",\n  \"status\": 400,\n  \"erro\": \"Anúncio indisponível ou sem estoque para compra\"\n}"
+            },
+            {
+              "name": "404 Not Found (anuncio nao encontrado)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"anuncioId\": 999,\n  \"quantidade\": 1\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/carrinho/itens",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "carrinho",
+                    "itens"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"timestamp\": \"2026-11-15T19:00:00.000000\",\n  \"status\": 404,\n  \"erro\": \"Anúncio não encontrado\"\n}"
+            },
+            {
+              "name": "401 Unauthorized (token ausente ou invalido)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"anuncioId\": 1,\n  \"quantidade\": 2\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/carrinho/itens",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "carrinho",
+                    "itens"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": ""
+            }
+          ]
+        },
+        {
+          "name": "consultar",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/carrinho",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "carrinho"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (carrinho com itens e total calculado)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/carrinho",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "carrinho"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"compradorId\": 2,\n  \"itens\": [\n    {\n      \"id\": 1,\n      \"anuncioId\": 2,\n      \"vendedorId\": 3,\n      \"nome\": \"Mangá Colecionável — Edição Especial\",\n      \"imagem\": \"https://picsum.photos/200\",\n      \"precoUnitario\": 49.90,\n      \"quantidade\": 2,\n      \"quantidadeDisponivel\": 5,\n      \"disponivel\": true,\n      \"subtotal\": 99.80\n    }\n  ],\n  \"total\": 99.80\n}"
+            },
+            {
+              "name": "200 OK (carrinho vazio)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/carrinho",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "carrinho"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"compradorId\": 3,\n  \"itens\": [],\n  \"total\": 0.00\n}"
+            },
+            {
+              "name": "401 Unauthorized (token ausente ou invalido)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/carrinho",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "carrinho"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": ""
+            }
+          ]
+        },
+        {
+          "name": "listarItens",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/carrinho/itens",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "carrinho",
+                "itens"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (itens do carrinho paginados)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/carrinho/itens",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "carrinho",
+                    "itens"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"content\": [\n    {\n      \"id\": 1,\n      \"anuncioId\": 2,\n      \"vendedorId\": 3,\n      \"nomeProduto\": \"Mangá Colecionável — Edição Especial\",\n      \"imagem\": \"https://picsum.photos/200\",\n      \"precoUnitario\": 49.90,\n      \"quantidade\": 2,\n      \"quantidadeDisponivel\": 5,\n      \"disponivel\": true,\n      \"subtotal\": 99.80,\n      \"criadoEm\": \"2026-11-13T18:20:00.000000\"\n    }\n  ],\n  \"totalElements\": 1,\n  \"totalPages\": 1,\n  \"size\": 10,\n  \"number\": 0\n}"
+            },
+            {
+              "name": "200 OK (pagina vazia quando carrinho nao possui itens)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/carrinho/itens",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "carrinho",
+                    "itens"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"content\": [],\n  \"totalElements\": 0,\n  \"totalPages\": 0,\n  \"size\": 10,\n  \"number\": 0\n}"
+            },
+            {
+              "name": "401 Unauthorized (token ausente ou invalido)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/carrinho/itens",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "carrinho",
+                    "itens"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": ""
+            }
+          ]
+        },
+        {
+          "name": "detalharItem",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/carrinho/itens/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "carrinho",
+                "itens",
+                "1"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (item do carrinho encontrado)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/carrinho/itens/1",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "carrinho",
+                    "itens",
+                    "1"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 1,\n  \"anuncioId\": 2,\n  \"vendedorId\": 3,\n  \"nomeProduto\": \"Mangá Colecionável — Edição Especial\",\n  \"imagem\": \"https://picsum.photos/200\",\n  \"precoUnitario\": 49.90,\n  \"quantidade\": 2,\n  \"quantidadeDisponivel\": 5,\n  \"disponivel\": true,\n  \"subtotal\": 99.80,\n  \"criadoEm\": \"2026-11-13T18:20:00.000000\"\n}"
+            },
+            {
+              "name": "403 Forbidden (item pertence a outro comprador)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/carrinho/itens/1",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "carrinho",
+                    "itens",
+                    "1"
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"timestamp\": \"2026-11-15T19:00:00.000000\",\n  \"status\": 403,\n  \"erro\": \"Acesso negado: você não possui permissão para realizar esta operação.\"\n}"
+            },
+            {
+              "name": "404 Not Found (item nao encontrado)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/carrinho/itens/999",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "carrinho",
+                    "itens",
+                    "999"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"timestamp\": \"2026-11-15T19:00:00.000000\",\n  \"status\": 404,\n  \"erro\": \"Item do carrinho não encontrado\"\n}"
+            },
+            {
+              "name": "401 Unauthorized (token ausente ou invalido)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/carrinho/itens/1",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "carrinho",
+                    "itens",
+                    "1"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": ""
+            }
+          ]
+        }
+      ]
     }
   ],
   "variable": [
