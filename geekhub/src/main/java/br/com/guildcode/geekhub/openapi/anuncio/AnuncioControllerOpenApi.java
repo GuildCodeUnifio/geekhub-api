@@ -6,15 +6,21 @@ import br.com.guildcode.geekhub.controller.anuncio.dto.response.CadastrarAnuncio
 import br.com.guildcode.geekhub.controller.anuncio.dto.response.DetalharAnuncioResponse;
 import br.com.guildcode.geekhub.controller.anuncio.dto.response.EditarAnuncioResponse;
 import br.com.guildcode.geekhub.controller.anuncio.dto.response.ListarAnuncioAdminResponse;
+import br.com.guildcode.geekhub.controller.anuncio.dto.response.ListarAnuncioResponse;
 import br.com.guildcode.geekhub.controller.anuncio.dto.response.ListarMeuAnuncioResponse;
+import br.com.guildcode.geekhub.domain.anuncio.enums.CondicaoProduto;
+import br.com.guildcode.geekhub.domain.anuncio.enums.ConservacaoProduto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-@Tag(name = "Anúncios", description = "Cadastro, consulta, edição e remoção de anúncios de produtos")
+import java.math.BigDecimal;
+
+@Tag(name = "Anúncios", description = "Cadastro, pesquisa, consulta, edição e remoção de anúncios de produtos")
 public interface AnuncioControllerOpenApi {
 
     @Operation(summary = "Cadastrar novo anúncio")
@@ -25,6 +31,21 @@ public interface AnuncioControllerOpenApi {
             @ApiResponse(responseCode = "404", description = "Categoria não encontrada")
     })
     CadastrarAnuncioResponse cadastrar(CadastrarAnuncioRequest request);
+
+    @Operation(summary = "Listar e pesquisar anúncios no catálogo público")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Página de anúncios disponíveis retornada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Faixa de preço inválida nos parâmetros de busca")
+    })
+    Page<ListarAnuncioResponse> listar(
+            @Parameter(description = "Termo parcial para pesquisa no nome do anúncio") String nome,
+            @Parameter(description = "Identificador da categoria") Long categoriaId,
+            @Parameter(description = "Preço mínimo do filtro") BigDecimal precoMin,
+            @Parameter(description = "Preço máximo do filtro") BigDecimal precoMax,
+            @Parameter(description = "Condição do produto (NOVO ou USADO)") CondicaoProduto condicao,
+            @Parameter(description = "Conservação do produto (EXCELENTE, BOM ou REGULAR)") ConservacaoProduto conservacao,
+            @Parameter(description = "Identificador do vendedor") Long vendedorId,
+            Pageable pageable);
 
     @Operation(summary = "Detalhar anúncio por ID")
     @ApiResponses({

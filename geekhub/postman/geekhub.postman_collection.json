@@ -2262,6 +2262,248 @@
               "body": "{\n  \"timestamp\": \"2026-11-15T18:30:00.000000\",\n  \"status\": 403,\n  \"erro\": \"Acesso negado: você não possui permissão para realizar esta operação.\"\n}"
             }
           ]
+        },
+        {
+          "name": "listar",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/anuncios",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "anuncios"
+              ],
+              "query": [
+                {
+                  "key": "nome",
+                  "value": "Naruto",
+                  "disabled": true
+                },
+                {
+                  "key": "categoriaId",
+                  "value": "1",
+                  "disabled": true
+                },
+                {
+                  "key": "precoMin",
+                  "value": "100",
+                  "disabled": true
+                },
+                {
+                  "key": "precoMax",
+                  "value": "2000",
+                  "disabled": true
+                },
+                {
+                  "key": "condicao",
+                  "value": "NOVO",
+                  "disabled": true
+                },
+                {
+                  "key": "conservacao",
+                  "value": "EXCELENTE",
+                  "disabled": true
+                },
+                {
+                  "key": "vendedorId",
+                  "value": "3",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (catalogo sem filtros - apenas disponiveis com estoque)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/anuncios",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "anuncios"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"content\": [\n    {\n      \"id\": 4,\n      \"nome\": \"HQ Batman: O Cavaleiro das Trevas\",\n      \"preco\": 139.90,\n      \"imagemPrincipal\": \"https://picsum.photos/200\",\n      \"categoriaId\": 2,\n      \"categoriaNome\": \"Quadrinhos e mangás\",\n      \"condicao\": \"USADO\",\n      \"conservacao\": \"REGULAR\",\n      \"quantidadeDisponivel\": 4,\n      \"vendedorId\": 2,\n      \"vendedorNome\": \"Usuario GeekHub\",\n      \"criadoEm\": \"2026-11-13T18:13:00.000000\"\n    },\n    {\n      \"id\": 3,\n      \"nome\": \"Estátua Kakashi Hatake 18cm\",\n      \"preco\": 329.90,\n      \"imagemPrincipal\": \"https://picsum.photos/200\",\n      \"categoriaId\": 1,\n      \"categoriaNome\": \"Figuras colecionáveis\",\n      \"condicao\": \"USADO\",\n      \"conservacao\": \"BOM\",\n      \"quantidadeDisponivel\": 2,\n      \"vendedorId\": 3,\n      \"vendedorNome\": \"Vendedor GeekHub\",\n      \"criadoEm\": \"2026-11-13T18:12:00.000000\"\n    },\n    {\n      \"id\": 2,\n      \"nome\": \"Mangá Colecionável — Edição Especial\",\n      \"preco\": 49.90,\n      \"imagemPrincipal\": \"https://picsum.photos/200\",\n      \"categoriaId\": 2,\n      \"categoriaNome\": \"Quadrinhos e mangás\",\n      \"condicao\": \"NOVO\",\n      \"conservacao\": \"EXCELENTE\",\n      \"quantidadeDisponivel\": 5,\n      \"vendedorId\": 3,\n      \"vendedorNome\": \"Vendedor GeekHub\",\n      \"criadoEm\": \"2026-11-13T18:11:00.000000\"\n    },\n    {\n      \"id\": 1,\n      \"nome\": \"Action figure Naruto 1ª edição\",\n      \"preco\": 1850.00,\n      \"imagemPrincipal\": \"https://picsum.photos/200\",\n      \"categoriaId\": 1,\n      \"categoriaNome\": \"Figuras colecionáveis\",\n      \"condicao\": \"NOVO\",\n      \"conservacao\": \"EXCELENTE\",\n      \"quantidadeDisponivel\": 3,\n      \"vendedorId\": 3,\n      \"vendedorNome\": \"Vendedor GeekHub\",\n      \"criadoEm\": \"2026-11-13T18:10:00.000000\"\n    }\n  ],\n  \"totalElements\": 4,\n  \"totalPages\": 1,\n  \"size\": 10,\n  \"number\": 0\n}"
+            },
+            {
+              "name": "200 OK (pesquisa por nome parcial case-insensitive)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/anuncios?nome=naruto",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "anuncios"
+                  ],
+                  "query": [
+                    {
+                      "key": "nome",
+                      "value": "naruto"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"content\": [\n    {\n      \"id\": 1,\n      \"nome\": \"Action figure Naruto 1ª edição\",\n      \"preco\": 1850.00,\n      \"imagemPrincipal\": \"https://picsum.photos/200\",\n      \"categoriaId\": 1,\n      \"categoriaNome\": \"Figuras colecionáveis\",\n      \"condicao\": \"NOVO\",\n      \"conservacao\": \"EXCELENTE\",\n      \"quantidadeDisponivel\": 3,\n      \"vendedorId\": 3,\n      \"vendedorNome\": \"Vendedor GeekHub\",\n      \"criadoEm\": \"2026-11-13T18:10:00.000000\"\n    }\n  ],\n  \"totalElements\": 1,\n  \"totalPages\": 1,\n  \"size\": 10,\n  \"number\": 0\n}"
+            },
+            {
+              "name": "200 OK (todos os filtros combinados)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/anuncios?nome=kakashi&categoriaId=1&precoMin=100&precoMax=500&condicao=USADO&conservacao=BOM&vendedorId=3",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "anuncios"
+                  ],
+                  "query": [
+                    {
+                      "key": "nome",
+                      "value": "kakashi"
+                    },
+                    {
+                      "key": "categoriaId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "precoMin",
+                      "value": "100"
+                    },
+                    {
+                      "key": "precoMax",
+                      "value": "500"
+                    },
+                    {
+                      "key": "condicao",
+                      "value": "USADO"
+                    },
+                    {
+                      "key": "conservacao",
+                      "value": "BOM"
+                    },
+                    {
+                      "key": "vendedorId",
+                      "value": "3"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"content\": [\n    {\n      \"id\": 3,\n      \"nome\": \"Estátua Kakashi Hatake 18cm\",\n      \"preco\": 329.90,\n      \"imagemPrincipal\": \"https://picsum.photos/200\",\n      \"categoriaId\": 1,\n      \"categoriaNome\": \"Figuras colecionáveis\",\n      \"condicao\": \"USADO\",\n      \"conservacao\": \"BOM\",\n      \"quantidadeDisponivel\": 2,\n      \"vendedorId\": 3,\n      \"vendedorNome\": \"Vendedor GeekHub\",\n      \"criadoEm\": \"2026-11-13T18:12:00.000000\"\n    }\n  ],\n  \"totalElements\": 1,\n  \"totalPages\": 1,\n  \"size\": 10,\n  \"number\": 0\n}"
+            },
+            {
+              "name": "200 OK (nenhum anuncio encontrado)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/anuncios?nome=inexistente",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "anuncios"
+                  ],
+                  "query": [
+                    {
+                      "key": "nome",
+                      "value": "inexistente"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"content\": [],\n  \"totalElements\": 0,\n  \"totalPages\": 0,\n  \"size\": 10,\n  \"number\": 0\n}"
+            },
+            {
+              "name": "400 Bad Request (faixa de preco invalida)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/anuncios?precoMin=500&precoMax=100",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "anuncios"
+                  ],
+                  "query": [
+                    {
+                      "key": "precoMin",
+                      "value": "500"
+                    },
+                    {
+                      "key": "precoMax",
+                      "value": "100"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"timestamp\": \"2026-11-15T18:45:00.000000\",\n  \"status\": 400,\n  \"erro\": \"Preço mínimo não pode ser maior que o preço máximo\"\n}"
+            }
+          ]
         }
       ]
     }
