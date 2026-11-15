@@ -73,7 +73,7 @@ Todas as mensagens de commit devem seguir o padrão:
 
 Antes de codificar, consulte o guia completo em [AGENTS.md](AGENTS.md). Pontos essenciais:
 
-- **Pacotes (`camada > entidade > classe`)**: `domain`, `repository`, `openapi`, `controller` (`request`/`response`), `mapper`, `validator`, `service` (`validator/`).
+- **Pacotes (`camada > entidade > classe`)**: `domain` (`enums/`), `repository`, `openapi`, `controller` (`dto/request` e `dto/response`), `mapper`, `validator`, `service` (`validator/`).
 - **Sem `@Autowired`**: utilize campos `private final` com construtor explícito no topo da classe.
 - **Sem tipos primitivos**: utilize sempre Wrappers (`Long`, `Integer`, `Boolean`, `BigDecimal`, `Double`).
 - **DTOs**: sempre `record` com `@Builder` exclusivos por ação/endpoint.

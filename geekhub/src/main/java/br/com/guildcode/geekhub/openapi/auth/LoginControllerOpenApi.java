@@ -1,7 +1,7 @@
 package br.com.guildcode.geekhub.openapi.auth;
 
-import br.com.guildcode.geekhub.controller.auth.request.LoginRequest;
-import br.com.guildcode.geekhub.controller.auth.response.LoginResponse;
+import br.com.guildcode.geekhub.controller.auth.dto.request.LoginRequest;
+import br.com.guildcode.geekhub.controller.auth.dto.response.LoginResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

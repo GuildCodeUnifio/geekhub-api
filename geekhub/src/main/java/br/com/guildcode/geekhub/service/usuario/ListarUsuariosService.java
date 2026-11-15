@@ -1,6 +1,6 @@
 package br.com.guildcode.geekhub.service.usuario;
 
-import br.com.guildcode.geekhub.controller.usuario.response.ListarUsuarioResponse;
+import br.com.guildcode.geekhub.controller.usuario.dto.response.ListarUsuarioResponse;
 import br.com.guildcode.geekhub.mapper.usuario.ListarUsuarioMapper;
 import br.com.guildcode.geekhub.repository.usuario.UsuarioRepository;
 import org.springframework.data.domain.Page;

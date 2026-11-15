@@ -1,6 +1,6 @@
 package br.com.guildcode.geekhub.mapper.usuario;
 
-import br.com.guildcode.geekhub.controller.usuario.response.EditarUsuarioResponse;
+import br.com.guildcode.geekhub.controller.usuario.dto.response.EditarUsuarioResponse;
 import br.com.guildcode.geekhub.domain.usuario.Usuario;
 import org.springframework.stereotype.Component;
 

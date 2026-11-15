@@ -23,12 +23,14 @@ br.com.guildcode.geekhub/
 ├── GeekhubApplication.java
 ├── config/                         # SecurityConfig, CorsConfig, OpenApiConfig, FlywayConfig
 ├── exception/                      # GlobalExceptionHandler + exceções de domínio
-├── domain/<entidade>/              # Entidades JPA (@Entity) e Enums de domínio
+├── domain/<entidade>/              # Entidades JPA (@Entity) e @Embeddable de domínio
+│   └── enums/                      # Enums de domínio da entidade (enums no plural: enum é palavra reservada no Java)
 ├── repository/<entidade>/          # Interfaces JpaRepository
 ├── openapi/<entidade>/             # Interfaces *ControllerOpenApi (anotações Swagger)
 ├── controller/<entidade>/          # @RestController implementando *ControllerOpenApi
-│   ├── request/                    # DTOs de entrada (records com @Builder)
-│   └── response/                   # DTOs de saída (records com @Builder)
+│   └── dto/
+│       ├── request/                # DTOs de entrada (records com @Builder)
+│       └── response/               # DTOs de saída (records com @Builder)
 ├── mapper/<entidade>/              # @Component para conversão DTO <-> Entidade
 ├── validator/<entidade>/           # Validadores de entrada chamados pelas Services
 └── service/<entidade>/             # Regras de negócio (1 classe por caso de uso)

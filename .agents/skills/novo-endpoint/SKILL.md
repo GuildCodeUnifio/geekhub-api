@@ -11,15 +11,15 @@ Siga esta ordem exata para manter a arquitetura **camada > entidade > classe** d
 
 ## Passo 1: Banco de Dados e Domínio (se houver nova tabela/coluna)
 1. Crie ou incremente a migration em `geekhub/src/main/resources/db/migration/V<N>__<descricao>.sql` (ou ative `/nova-migracao`).
-2. Crie ou atualize a entidade em `domain/<entidade>/<Entidade>.java` usando apenas **Wrapper types** (`Long`, `Integer`, `Boolean`, `BigDecimal`), Lombok (`@Builder`, `@Getter`, `@Setter`, `@NoArgsConstructor`, `@AllArgsConstructor`, `@EqualsAndHashCode(of = "id")`) e mapeamento 100% compatível com `ddl-auto=validate`.
+2. Crie ou atualize a entidade em `domain/<entidade>/<Entidade>.java` (e eventuais enums em `domain/<entidade>/enums/<NomeDoEnum>.java`) usando apenas **Wrapper types** (`Long`, `Integer`, `Boolean`, `BigDecimal`), Lombok (`@Builder`, `@Getter`, `@Setter`, `@NoArgsConstructor`, `@AllArgsConstructor`, `@EqualsAndHashCode(of = "id")`) e mapeamento 100% compatível com `ddl-auto=validate`.
 3. Crie o repositório em `repository/<entidade>/<Entidade>Repository.java` estendendo `JpaRepository<<Entidade>, Long>`.
 
 ---
 
 ## Passo 2: DTOs (`record` com `@Builder`)
-1. Em `controller/<entidade>/request/<Acao><Entidade>Request.java`:
+1. Em `controller/<entidade>/dto/request/<Acao><Entidade>Request.java`:
    - `record` público com `@Builder`, anotações Jakarta Validation (`@NotBlank`, `@NotNull`, `@Size`, `@Positive`, etc.) e tipos Wrapper.
-2. Em `controller/<entidade>/response/<Acao><Entidade>Response.java`:
+2. Em `controller/<entidade>/dto/response/<Acao><Entidade>Response.java`:
    - `record` público com `@Builder` exclusivo para o retorno dessa ação.
 
 ---

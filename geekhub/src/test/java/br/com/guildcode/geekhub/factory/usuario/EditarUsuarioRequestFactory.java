@@ -1,6 +1,6 @@
 package br.com.guildcode.geekhub.factory.usuario;
 
-import br.com.guildcode.geekhub.controller.usuario.request.EditarUsuarioRequest;
+import br.com.guildcode.geekhub.controller.usuario.dto.request.EditarUsuarioRequest;
 
 public class EditarUsuarioRequestFactory {
 

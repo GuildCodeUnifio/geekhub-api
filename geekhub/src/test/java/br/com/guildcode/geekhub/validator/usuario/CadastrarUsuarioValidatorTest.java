@@ -1,6 +1,6 @@
 package br.com.guildcode.geekhub.validator.usuario;
 
-import br.com.guildcode.geekhub.controller.usuario.request.CadastrarUsuarioRequest;
+import br.com.guildcode.geekhub.controller.usuario.dto.request.CadastrarUsuarioRequest;
 import br.com.guildcode.geekhub.exception.NegocioException;
 import br.com.guildcode.geekhub.factory.usuario.CadastrarUsuarioRequestFactory;
 import org.junit.jupiter.api.DisplayName;

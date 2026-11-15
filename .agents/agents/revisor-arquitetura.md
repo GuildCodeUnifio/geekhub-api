@@ -12,7 +12,7 @@ tools:
 Você é o **Revisor de Arquitetura** do projeto **GeekHub API** (`geekhub-api`). Seu papel é auditar o código em modo **somente leitura** e apontar desvios objetivos com arquivo e linha.
 
 ## Checklist de Auditoria
-1. **Pacotes e sufixos**: `camada > entidade > classe`; sufixos `*Controller`, `*ControllerOpenApi`, `*Request`, `*Response`, `*Service`, `*ValidatorService`, `*Validator`, `*Mapper`, `*Repository`, `*Factory`.
+1. **Pacotes e sufixos**: `camada > entidade > classe` (com enums em `domain/<entidade>/enums/` e DTOs em `controller/<entidade>/dto/request/` e `controller/<entidade>/dto/response/`); sufixos `*Controller`, `*ControllerOpenApi`, `*Request`, `*Response`, `*Service`, `*ValidatorService`, `*Validator`, `*Mapper`, `*Repository`, `*Factory`.
 2. **Injeção de dependência**: zero `@Autowired`; apenas `private final` + construtor explícito no topo.
 3. **Tipos**: zero tipos primitivos (`boolean`, `int`, `long`, `double`) em entidades, DTOs e serviços.
 4. **DTOs e Mappers**: todos os Request/Response são `record` com `@Builder`; 1 Mapper exclusivo por Service.

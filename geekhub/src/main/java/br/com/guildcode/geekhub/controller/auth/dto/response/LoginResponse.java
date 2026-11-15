@@ -1,4 +1,4 @@
-package br.com.guildcode.geekhub.controller.auth.response;
+package br.com.guildcode.geekhub.controller.auth.dto.response;
 
 import lombok.Builder;
 

@@ -1,6 +1,6 @@
 package br.com.guildcode.geekhub.factory.auth;
 
-import br.com.guildcode.geekhub.controller.auth.request.LoginRequest;
+import br.com.guildcode.geekhub.controller.auth.dto.request.LoginRequest;
 
 public class LoginRequestFactory {
 

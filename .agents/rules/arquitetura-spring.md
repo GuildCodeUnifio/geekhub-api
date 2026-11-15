@@ -7,7 +7,7 @@ globs: "**/src/main/**/*.java, **/src/main/resources/**"
 
 Ao criar ou editar classes em `src/main`, aplique obrigatoriamente:
 
-1. **Estrutura de pacotes**: `camada > entidade > classe` (`domain`, `repository`, `openapi`, `controller`, `controller/request`, `controller/response`, `mapper`, `validator`, `service`, `service/<entidade>/validator`).
+1. **Estrutura de pacotes**: `camada > entidade > classe` (`domain`, `domain/<entidade>/enums` para enums de domínio — usar `enums` no plural porque `enum` é palavra reservada no Java, `repository`, `openapi`, `controller`, `controller/<entidade>/dto/request`, `controller/<entidade>/dto/response`, `mapper`, `validator`, `service`, `service/<entidade>/validator`).
 2. **Construtor explícito**: nunca use `@Autowired`. Use campos `private final` com construtor no topo da classe.
 3. **Sem primitivos**: use apenas classes Wrapper (`Long`, `Integer`, `Boolean`, `BigDecimal`, `Double`).
 4. **DTOs**: todo Request e Response deve ser `record` público com `@Builder`, exclusivo para aquela ação.

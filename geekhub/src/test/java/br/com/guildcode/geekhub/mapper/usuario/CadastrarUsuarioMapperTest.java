@@ -1,7 +1,7 @@
 package br.com.guildcode.geekhub.mapper.usuario;
 
-import br.com.guildcode.geekhub.controller.usuario.request.CadastrarUsuarioRequest;
-import br.com.guildcode.geekhub.controller.usuario.response.CadastrarUsuarioResponse;
+import br.com.guildcode.geekhub.controller.usuario.dto.request.CadastrarUsuarioRequest;
+import br.com.guildcode.geekhub.controller.usuario.dto.response.CadastrarUsuarioResponse;
 import br.com.guildcode.geekhub.domain.usuario.Usuario;
 import br.com.guildcode.geekhub.factory.usuario.CadastrarUsuarioRequestFactory;
 import br.com.guildcode.geekhub.factory.usuario.UsuarioFactory;
