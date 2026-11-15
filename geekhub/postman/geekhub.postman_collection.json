@@ -1943,6 +1943,325 @@
               "body": "{\n  \"timestamp\": \"2026-11-15T18:00:00.000000\",\n  \"status\": 409,\n  \"erro\": \"Não é possível remover anúncio pois existem pedidos vinculados\"\n}"
             }
           ]
+        },
+        {
+          "name": "detalhar",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/anuncios/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "anuncios",
+                "1"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (detalhes do anuncio com avaliacoes do vendedor)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/anuncios/1",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "anuncios",
+                    "1"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 1,\n  \"nome\": \"Action Figure Goku SSJ\",\n  \"descricao\": \"Figura colecionável edição especial com caixa original\",\n  \"categoriaId\": 1,\n  \"categoriaNome\": \"Figuras colecionáveis\",\n  \"preco\": 299.90,\n  \"quantidadeDisponivel\": 2,\n  \"disponivel\": true,\n  \"condicao\": \"NOVO\",\n  \"conservacao\": \"EXCELENTE\",\n  \"imagens\": [\n    \"https://picsum.photos/200\"\n  ],\n  \"vendedor\": {\n    \"id\": 3,\n    \"nome\": \"Vendedor GeekHub\",\n    \"imagemPerfil\": \"https://picsum.photos/200\",\n    \"notaMedia\": 5.0,\n    \"quantidadeAvaliacoes\": 1\n  },\n  \"criadoEm\": \"2026-11-13T18:10:00.000000\"\n}"
+            },
+            {
+              "name": "200 OK (anuncio de vendedor sem avaliacoes)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/anuncios/4",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "anuncios",
+                    "4"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 4,\n  \"nome\": \"Console Super Nintendo\",\n  \"descricao\": \"Acompanha dois controles originais funcionando perfeitamente\",\n  \"categoriaId\": 4,\n  \"categoriaNome\": \"Jogos\",\n  \"preco\": 550.00,\n  \"quantidadeDisponivel\": 1,\n  \"disponivel\": true,\n  \"condicao\": \"USADO\",\n  \"conservacao\": \"BOM\",\n  \"imagens\": [\n    \"https://picsum.photos/200\"\n  ],\n  \"vendedor\": {\n    \"id\": 2,\n    \"nome\": \"Usuario GeekHub\",\n    \"imagemPerfil\": \"https://picsum.photos/200\",\n    \"notaMedia\": null,\n    \"quantidadeAvaliacoes\": 0\n  },\n  \"criadoEm\": \"2026-11-13T18:10:00.000000\"\n}"
+            },
+            {
+              "name": "404 Not Found (anuncio nao encontrado)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/anuncios/999",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "anuncios",
+                    "999"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"timestamp\": \"2026-11-15T18:30:00.000000\",\n  \"status\": 404,\n  \"erro\": \"Anúncio não encontrado\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "listarMeus",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/anuncios/meus",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "anuncios",
+                "meus"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (meus anuncios paginados incluindo inativos)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/anuncios/meus",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "anuncios",
+                    "meus"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"content\": [\n    {\n      \"id\": 1,\n      \"nome\": \"Action Figure Goku SSJ\",\n      \"preco\": 299.90,\n      \"quantidadeDisponivel\": 2,\n      \"disponivel\": true,\n      \"condicao\": \"NOVO\",\n      \"conservacao\": \"EXCELENTE\",\n      \"categoriaNome\": \"Figuras colecionáveis\",\n      \"imagemPrincipal\": \"https://picsum.photos/200\",\n      \"criadoEm\": \"2026-11-13T18:10:00.000000\"\n    },\n    {\n      \"id\": 5,\n      \"nome\": \"HQ Batman Ano Um\",\n      \"preco\": 85.00,\n      \"quantidadeDisponivel\": 0,\n      \"disponivel\": false,\n      \"condicao\": \"USADO\",\n      \"conservacao\": \"OTIMO\",\n      \"categoriaNome\": \"Quadrinhos\",\n      \"imagemPrincipal\": \"https://picsum.photos/200\",\n      \"criadoEm\": \"2026-11-13T18:10:00.000000\"\n    }\n  ],\n  \"totalElements\": 4,\n  \"totalPages\": 1,\n  \"size\": 10,\n  \"number\": 0\n}"
+            },
+            {
+              "name": "200 OK (vendedor sem anuncios cadastrados)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/anuncios/meus",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "anuncios",
+                    "meus"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"content\": [],\n  \"totalElements\": 0,\n  \"totalPages\": 0,\n  \"size\": 10,\n  \"number\": 0\n}"
+            },
+            {
+              "name": "401 Unauthorized (token ausente ou invalido)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/anuncios/meus",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "anuncios",
+                    "meus"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": ""
+            }
+          ]
+        },
+        {
+          "name": "listarAdmin",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/anuncios/admin",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "anuncios",
+                "admin"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (todos os anuncios da plataforma para ADMIN)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/anuncios/admin",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "anuncios",
+                    "admin"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"content\": [\n    {\n      \"id\": 1,\n      \"nome\": \"Action Figure Goku SSJ\",\n      \"preco\": 299.90,\n      \"quantidadeDisponivel\": 2,\n      \"disponivel\": true,\n      \"categoriaNome\": \"Figuras colecionáveis\",\n      \"vendedorId\": 3,\n      \"vendedorNome\": \"Vendedor GeekHub\",\n      \"criadoEm\": \"2026-11-13T18:10:00.000000\"\n    },\n    {\n      \"id\": 4,\n      \"nome\": \"Console Super Nintendo\",\n      \"preco\": 550.00,\n      \"quantidadeDisponivel\": 1,\n      \"disponivel\": true,\n      \"categoriaNome\": \"Jogos\",\n      \"vendedorId\": 2,\n      \"vendedorNome\": \"Usuario GeekHub\",\n      \"criadoEm\": \"2026-11-13T18:10:00.000000\"\n    }\n  ],\n  \"totalElements\": 5,\n  \"totalPages\": 1,\n  \"size\": 10,\n  \"number\": 0\n}"
+            },
+            {
+              "name": "401 Unauthorized (token ausente ou invalido)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/anuncios/admin",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "anuncios",
+                    "admin"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": ""
+            },
+            {
+              "name": "403 Forbidden (usuario sem permissao ADMIN)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/anuncios/admin",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "anuncios",
+                    "admin"
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"timestamp\": \"2026-11-15T18:30:00.000000\",\n  \"status\": 403,\n  \"erro\": \"Acesso negado: você não possui permissão para realizar esta operação.\"\n}"
+            }
+          ]
         }
       ]
     }

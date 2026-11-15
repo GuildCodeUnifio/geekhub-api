@@ -3,13 +3,24 @@ package br.com.guildcode.geekhub.controller.anuncio;
 import br.com.guildcode.geekhub.controller.anuncio.dto.request.CadastrarAnuncioRequest;
 import br.com.guildcode.geekhub.controller.anuncio.dto.request.EditarAnuncioRequest;
 import br.com.guildcode.geekhub.controller.anuncio.dto.response.CadastrarAnuncioResponse;
+import br.com.guildcode.geekhub.controller.anuncio.dto.response.DetalharAnuncioResponse;
 import br.com.guildcode.geekhub.controller.anuncio.dto.response.EditarAnuncioResponse;
+import br.com.guildcode.geekhub.controller.anuncio.dto.response.ListarAnuncioAdminResponse;
+import br.com.guildcode.geekhub.controller.anuncio.dto.response.ListarMeuAnuncioResponse;
 import br.com.guildcode.geekhub.openapi.anuncio.AnuncioControllerOpenApi;
 import br.com.guildcode.geekhub.service.anuncio.CadastrarAnuncioService;
+import br.com.guildcode.geekhub.service.anuncio.DetalharAnuncioService;
 import br.com.guildcode.geekhub.service.anuncio.EditarAnuncioService;
+import br.com.guildcode.geekhub.service.anuncio.ListarAnunciosAdminService;
+import br.com.guildcode.geekhub.service.anuncio.ListarMeusAnunciosService;
 import br.com.guildcode.geekhub.service.anuncio.RemoverAnuncioService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import static org.springframework.data.domain.Sort.Direction.DESC;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
@@ -27,15 +39,24 @@ import static org.springframework.http.HttpStatus.OK;
 public class AnuncioController implements AnuncioControllerOpenApi {
 
     private final CadastrarAnuncioService cadastrarAnuncioService;
+    private final DetalharAnuncioService detalharAnuncioService;
+    private final ListarMeusAnunciosService listarMeusAnunciosService;
+    private final ListarAnunciosAdminService listarAnunciosAdminService;
     private final EditarAnuncioService editarAnuncioService;
     private final RemoverAnuncioService removerAnuncioService;
 
     public AnuncioController(
             CadastrarAnuncioService cadastrarAnuncioService,
+            DetalharAnuncioService detalharAnuncioService,
+            ListarMeusAnunciosService listarMeusAnunciosService,
+            ListarAnunciosAdminService listarAnunciosAdminService,
             EditarAnuncioService editarAnuncioService,
             RemoverAnuncioService removerAnuncioService) {
 
         this.cadastrarAnuncioService = cadastrarAnuncioService;
+        this.detalharAnuncioService = detalharAnuncioService;
+        this.listarMeusAnunciosService = listarMeusAnunciosService;
+        this.listarAnunciosAdminService = listarAnunciosAdminService;
         this.editarAnuncioService = editarAnuncioService;
         this.removerAnuncioService = removerAnuncioService;
     }
@@ -45,6 +66,30 @@ public class AnuncioController implements AnuncioControllerOpenApi {
     public CadastrarAnuncioResponse cadastrar(@Valid @RequestBody CadastrarAnuncioRequest request) {
 
         return cadastrarAnuncioService.cadastrar(request);
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(OK)
+    public DetalharAnuncioResponse detalhar(@PathVariable Long id) {
+
+        return detalharAnuncioService.detalhar(id);
+    }
+
+    @GetMapping("/meus")
+    @ResponseStatus(OK)
+    public Page<ListarMeuAnuncioResponse> listarMeus(
+            @PageableDefault(size = 10, sort = "criadoEm", direction = DESC) Pageable pageable) {
+
+        return listarMeusAnunciosService.listar(pageable);
+    }
+
+    @GetMapping("/admin")
+    @ResponseStatus(OK)
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    public Page<ListarAnuncioAdminResponse> listarAdmin(
+            @PageableDefault(size = 10, sort = "criadoEm", direction = DESC) Pageable pageable) {
+
+        return listarAnunciosAdminService.listar(pageable);
     }
 
     @PutMapping("/{id}")
