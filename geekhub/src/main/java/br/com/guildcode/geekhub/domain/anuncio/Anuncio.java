@@ -31,6 +31,7 @@ import java.util.List;
 
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
+import static java.util.Objects.isNull;
 import static org.hibernate.type.SqlTypes.VARCHAR;
 
 @Entity
@@ -90,4 +91,13 @@ public class Anuncio {
 
     @Column(name = "criado_em", nullable = false)
     private LocalDateTime criadoEm;
+
+    public String obterImagemPrincipal() {
+
+        if (isNull(this.imagens) || this.imagens.isEmpty()) {
+            return null;
+        }
+
+        return this.imagens.getFirst();
+    }
 }

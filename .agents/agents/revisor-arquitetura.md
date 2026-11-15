@@ -15,7 +15,7 @@ Você é o **Revisor de Arquitetura** do projeto **GeekHub API** (`geekhub-api`)
 1. **Pacotes e sufixos**: `camada > entidade > classe` (com enums em `domain/<entidade>/enums/` e DTOs em `controller/<entidade>/dto/request/` e `controller/<entidade>/dto/response/`); sufixos `*Controller`, `*ControllerOpenApi`, `*Request`, `*Response`, `*Service`, `*ValidatorService`, `*Validator`, `*Mapper`, `*Repository`, `*Factory`.
 2. **Injeção de dependência**: zero `@Autowired`; apenas `private final` + construtor explícito no topo.
 3. **Tipos**: zero tipos primitivos (`boolean`, `int`, `long`, `double`) em entidades, DTOs e serviços.
-4. **DTOs e Mappers**: todos os Request/Response são `record` com `@Builder`; 1 Mapper exclusivo por Service.
+4. **DTOs, Entidades (DRY) e Mappers**: todos os Request/Response são `record` com `@Builder`; 1 Mapper declarativo exclusivo por Service. Cálculos e derivações intrínsecas ao estado da entidade ficam como métodos na própria `@Entity` (não duplicados em Mappers) e possuem teste em `domain/<entidade>/<Entidade>Test.java`.
 5. **Separação de camadas**: `*Controller` não chama `*Validator` nem `*Repository`, implementa `*ControllerOpenApi` sem `@Override` e declara `@ResponseStatus(...)`.
 6. **Paginação e Segurança**: listagens retornam `Page<*Response>` com `@PageableDefault`; ações administrativas protegidas com `@PreAuthorize("hasAuthority('SCOPE_ADMIN')")`.
 7. **Flyway e Entidades**: colunas e constraints das `@Entity` coincidem com os scripts `V<N>__*.sql`.

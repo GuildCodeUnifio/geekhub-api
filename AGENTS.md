@@ -48,6 +48,7 @@ br.com.guildcode.geekhub/
   - `*Mapper`, `*Repository`, `*Factory` (testes)
 - **Um DTO (`Request`/`Response`) exclusivo por endpoint/ação** (ex: `CadastrarUsuarioRequest`, `EditarUsuarioResponse`, `ListarUsuarioResponse`).
 - **Um `*Mapper` exclusivo por `*Service`/ação**, evitando acoplamento entre casos de uso.
+- **Regras de negócio e derivações na entidade (DRY)**: cálculos, derivações ou consultas intrínsecas ao estado da entidade (ex: `ItemCarrinho.calcularSubtotal()`, `Anuncio.obterImagemPrincipal()`, `Usuario.adicionarPermissao(...)`) devem ficar como **métodos na própria `@Entity`** em `domain/<entidade>/`, nunca duplicados nos `*Mapper` ou `*Service`. O `*Mapper` faz apenas mapeamento declarativo `DTO <-> Entidade`.
 
 ### 3.2 Injeção de Dependência e Tipos
 - **Proibido `@Autowired`**: declarar dependências como `private final` com **construtor explícito no topo da classe**.
@@ -106,6 +107,7 @@ br.com.guildcode.geekhub/
 ## 5. Testes e Cobertura JaCoCo (100%)
 
 - Cobertura obrigatória de **100%** (instruções, branches, linhas e métodos) em todas as classes de `service`, `validator`, `mapper` e `GlobalExceptionHandler`.
+- **Entidades de domínio (`*Test`)**: como `**/domain/**` é excluído da análise automática do JaCoCo no `pom.xml`, toda `@Entity` que possuir métodos com lógica/cálculo próprio (ex: `ItemCarrinho.calcularSubtotal()`, `Anuncio.obterImagemPrincipal()`) deve ter teste unitário dedicado em `src/test/java/br/com/guildcode/geekhub/domain/<entidade>/<Entidade>Test.java`.
 - **Repositórios (`*RepositoryTest`)**: escrever testes com `@DataJpaTest`, `@AutoConfigureTestDatabase(replace = NONE)` e `@ActiveProfiles("test")` (H2 em modo MySQL via `application-test.properties`) **apenas para métodos customizados com `@Query`** (JPQL ou nativa) criados manualmente; métodos derivados do Spring Data JPA não precisam de teste.
 - Todos os métodos de teste devem ter `@DisplayName("...")` em português e seguir o padrão **AAA comentado** (`// Arrange`, `// Act`, `// Assert`).
 - Criar massas de dados reutilizáveis em `src/test/java/br/com/guildcode/geekhub/factory/<entidade>/`.
