@@ -29,6 +29,8 @@ import java.util.List;
 
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
+import static java.math.BigDecimal.ZERO;
+import static java.math.RoundingMode.HALF_UP;
 import static org.hibernate.type.SqlTypes.VARCHAR;
 
 @Entity
@@ -80,4 +82,21 @@ public class Pedido {
 
     @Column(name = "criado_em", nullable = false)
     private LocalDateTime criadoEm;
+
+    public void calcularValorTotal() {
+
+        this.valorTotal = this.itens.stream()
+                .map(ItemPedido::getSubtotal)
+                .reduce(ZERO, BigDecimal::add)
+                .setScale(2, HALF_UP);
+    }
+
+    public void registrarEvento(EstadoPedido novoEstado, LocalDateTime ocorridoEm) {
+
+        this.estado = novoEstado;
+        this.historico.add(EventoPedido.builder()
+                .estado(novoEstado)
+                .ocorridoEm(ocorridoEm)
+                .build());
+    }
 }

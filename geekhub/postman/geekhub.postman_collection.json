@@ -3596,6 +3596,169 @@
           ]
         }
       ]
+    },
+    {
+      "name": "pedidos",
+      "item": [
+        {
+          "name": "criar",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/pedidos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pedidos"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "201 Created (pedido criado a partir do carrinho)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/pedidos",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pedidos"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 5,\n  \"compradorId\": 2,\n  \"compradorNome\": \"Usuario GeekHub\",\n  \"compradorEmail\": \"usuario@geekhub.com\",\n  \"itens\": [\n    {\n      \"anuncioId\": 2,\n      \"vendedorId\": 3,\n      \"nomeProduto\": \"Mangá Colecionável — Edição Especial\",\n      \"imagemProduto\": \"https://picsum.photos/200\",\n      \"precoUnitario\": 49.90,\n      \"quantidade\": 2,\n      \"subtotal\": 99.80\n    }\n  ],\n  \"valorTotal\": 99.80,\n  \"estado\": \"CRIADO\",\n  \"historico\": [\n    {\n      \"estado\": \"CRIADO\",\n      \"ocorridoEm\": \"2026-11-15T20:00:00.000000\"\n    }\n  ],\n  \"avaliado\": false,\n  \"criadoEm\": \"2026-11-15T20:00:00.000000\"\n}"
+            },
+            {
+              "name": "400 Bad Request (carrinho vazio)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/pedidos",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pedidos"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"timestamp\": \"2026-11-15T20:00:00.000000\",\n  \"status\": 400,\n  \"erro\": \"O carrinho de compras está vazio\"\n}"
+            },
+            {
+              "name": "409 Conflict (estoque insuficiente)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/pedidos",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pedidos"
+                  ]
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"timestamp\": \"2026-11-15T20:00:00.000000\",\n  \"status\": 409,\n  \"erro\": \"Estoque insuficiente para o anúncio 'Mangá Colecionável — Edição Especial'\"\n}"
+            },
+            {
+              "name": "409 Conflict (anuncio indisponivel)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/pedidos",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pedidos"
+                  ]
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"timestamp\": \"2026-11-15T20:00:00.000000\",\n  \"status\": 409,\n  \"erro\": \"O anúncio 'Mangá Colecionável — Edição Especial' não está mais disponível para compra\"\n}"
+            },
+            {
+              "name": "401 Unauthorized (token ausente ou invalido)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/pedidos",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pedidos"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": ""
+            }
+          ]
+        }
+      ]
     }
   ],
   "variable": [
