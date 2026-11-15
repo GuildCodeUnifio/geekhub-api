@@ -5,6 +5,7 @@ import br.com.guildcode.geekhub.domain.categoria.Categoria;
 import br.com.guildcode.geekhub.domain.pedido.EventoPedido;
 import br.com.guildcode.geekhub.domain.pedido.ItemPedido;
 import br.com.guildcode.geekhub.domain.pedido.Pedido;
+import br.com.guildcode.geekhub.domain.pedido.enums.EstadoPedido;
 import br.com.guildcode.geekhub.domain.usuario.Usuario;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
 import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
@@ -20,9 +23,11 @@ import java.util.List;
 
 import static br.com.guildcode.geekhub.domain.anuncio.enums.CondicaoProduto.NOVO;
 import static br.com.guildcode.geekhub.domain.anuncio.enums.ConservacaoProduto.EXCELENTE;
+import static br.com.guildcode.geekhub.domain.pedido.enums.EstadoPedido.CONCLUIDO;
 import static br.com.guildcode.geekhub.domain.pedido.enums.EstadoPedido.CRIADO;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -80,6 +85,57 @@ class PedidoRepositoryTest {
         assertFalse(existePedido);
     }
 
+    @Test
+    @DisplayName("Deve listar pedidos distintos do vendedor ignorando pedidos de outros vendedores")
+    void deveListarPedidosDistintosDoVendedor() {
+
+        // Arrange
+        Usuario vendedorAlvo = persistirUsuario("Vendedor Alvo", "vendedor.alvo@email.com");
+        Usuario outroVendedor = persistirUsuario("Outro Vendedor", "vendedor.outro@email.com");
+        Usuario comprador = persistirUsuario("Comprador Vendas", "comprador.vendas@email.com");
+        Categoria categoria = persistirCategoria("Colecionáveis Vendas");
+
+        Anuncio anuncio1 = persistirAnuncio("Item 1 Vendedor", categoria, vendedorAlvo);
+        Anuncio anuncio2 = persistirAnuncio("Item 2 Vendedor", categoria, vendedorAlvo);
+        Anuncio anuncioOutro = persistirAnuncio("Item Outro Vendedor", categoria, outroVendedor);
+
+        Pedido pedidoComDoisItens = persistirPedidoComItens(comprador, List.of(anuncio1, anuncio2), CRIADO);
+        persistirPedidoComItens(comprador, List.of(anuncioOutro), CRIADO);
+        entityManager.flush();
+        entityManager.clear();
+
+        // Act
+        Page<Pedido> vendas = pedidoRepository.listarVendas(vendedorAlvo.getId(), null, PageRequest.of(0, 10));
+
+        // Assert
+        assertEquals(1, vendas.getTotalElements());
+        assertEquals(pedidoComDoisItens.getId(), vendas.getContent().getFirst().getId());
+    }
+
+    @Test
+    @DisplayName("Deve filtrar vendas do vendedor pelo estado quando informado")
+    void deveFiltrarVendasDoVendedorPorEstado() {
+
+        // Arrange
+        Usuario vendedor = persistirUsuario("Vendedor Filtro", "vendedor.filtro@email.com");
+        Usuario comprador = persistirUsuario("Comprador Filtro", "comprador.filtro@email.com");
+        Categoria categoria = persistirCategoria("Mangás Vendas");
+        Anuncio anuncio = persistirAnuncio("Mangá Vendas", categoria, vendedor);
+
+        persistirPedidoComItens(comprador, List.of(anuncio), CRIADO);
+        Pedido pedidoConcluido = persistirPedidoComItens(comprador, List.of(anuncio), CONCLUIDO);
+        entityManager.flush();
+        entityManager.clear();
+
+        // Act
+        Page<Pedido> vendasConcluidas = pedidoRepository.listarVendas(
+                vendedor.getId(), CONCLUIDO, PageRequest.of(0, 10));
+
+        // Assert
+        assertEquals(1, vendasConcluidas.getTotalElements());
+        assertEquals(pedidoConcluido.getId(), vendasConcluidas.getContent().getFirst().getId());
+    }
+
     private Usuario persistirUsuario(String nome, String email) {
 
         Usuario usuario = Usuario.builder()
@@ -127,20 +183,31 @@ class PedidoRepositoryTest {
 
     private void persistirPedido(Usuario comprador, Anuncio anuncio) {
 
+        persistirPedidoComItens(comprador, List.of(anuncio), CRIADO);
+    }
+
+    private Pedido persistirPedidoComItens(Usuario comprador, List<Anuncio> anuncios, EstadoPedido estado) {
+
         LocalDateTime criadoEm = LocalDateTime.of(2026, 1, 10, 12, 30);
 
-        ItemPedido item = ItemPedido.builder()
-                .anuncioId(anuncio.getId())
-                .vendedorId(anuncio.getVendedor().getId())
-                .nomeProduto(anuncio.getNome())
-                .imagemProduto(anuncio.getImagens().getFirst())
-                .precoUnitario(anuncio.getPreco())
-                .quantidade(1)
-                .subtotal(anuncio.getPreco())
-                .build();
+        List<ItemPedido> itens = anuncios.stream()
+                .map(anuncio -> ItemPedido.builder()
+                        .anuncioId(anuncio.getId())
+                        .vendedorId(anuncio.getVendedor().getId())
+                        .nomeProduto(anuncio.getNome())
+                        .imagemProduto(anuncio.getImagens().getFirst())
+                        .precoUnitario(anuncio.getPreco())
+                        .quantidade(1)
+                        .subtotal(anuncio.getPreco())
+                        .build())
+                .toList();
+
+        BigDecimal valorTotal = itens.stream()
+                .map(ItemPedido::getSubtotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         EventoPedido evento = EventoPedido.builder()
-                .estado(CRIADO)
+                .estado(estado)
                 .ocorridoEm(criadoEm)
                 .build();
 
@@ -148,14 +215,14 @@ class PedidoRepositoryTest {
                 .comprador(comprador)
                 .compradorNome(comprador.getNome())
                 .compradorEmail(comprador.getEmail())
-                .valorTotal(anuncio.getPreco())
-                .estado(CRIADO)
+                .valorTotal(valorTotal)
+                .estado(estado)
                 .avaliado(FALSE)
-                .itens(List.of(item))
+                .itens(itens)
                 .historico(List.of(evento))
                 .criadoEm(criadoEm)
                 .build();
 
-        entityManager.persist(pedido);
+        return entityManager.persistFlushFind(pedido);
     }
 }

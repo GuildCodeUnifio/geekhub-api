@@ -57,7 +57,7 @@ A API sobe em `http://localhost:8080`.
 ## Documentação e Testes Manuais
 
 - **Swagger UI**: `http://localhost:8080/swagger-ui.html`
-- **Postman Collection**: [geekhub.postman_collection.json](geekhub/postman/geekhub.postman_collection.json)
+- **Postman Collection**: [geekhub.postman_collection.json](postman/geekhub.postman_collection.json)
 
 ---
 

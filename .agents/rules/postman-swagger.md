@@ -6,7 +6,7 @@ globs: "**/postman/**/*.json, **/openapi/**/*.java"
 # Regras de Documentação OpenAPI e Postman
 
 1. **Interfaces `*ControllerOpenApi`**: ficam em `openapi/<entidade>/`, centralizando `@Tag`, `@Operation` e `@ApiResponses` (`200/201/204`, `400`, `401`, `403` quando restrito a `ADMIN`, `404`, `409`).
-2. **Collection do Postman (`geekhub/postman/geekhub.postman_collection.json`)**:
+2. **Collection do Postman (`postman/geekhub.postman_collection.json`)**:
    - **1 pasta por recurso** (ex: `usuarios`, `login`, `produtos`).
    - **1 request por endpoint/ação** (ex: `cadastrar`, `listar`, `detalhar`, `editar`, `remover`).
    - **No mínimo 3 exemplos salvos (`response`)** dentro de cada request (1 cenário de sucesso e 2 cenários de erro mais relevantes, podendo adicionar exemplos extras em buscas e filtros combinados).

@@ -62,4 +62,10 @@ public class Usuario {
         this.permissoes.add(permissao);
         permissao.setUsuario(this);
     }
+
+    public Boolean isAdmin() {
+
+        return this.permissoes.stream()
+                .anyMatch(permissao -> "ADMIN".equals(permissao.getNome()));
+    }
 }
