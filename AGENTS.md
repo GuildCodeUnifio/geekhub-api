@@ -88,7 +88,7 @@ br.com.guildcode.geekhub/
 ### 3.6 Segurança e Autenticação
 - `SecurityConfig` usa JWT assimétrico RSA (`authz.pub` / `authz.pem`) em modo `STATELESS`, `@EnableMethodSecurity` e `BCryptPasswordEncoder`.
 - Claim `scope` no token contém os nomes da entidade `Permissao` (ex: `"USUARIO"`, `"ADMIN"`), que o Spring converte em authorities `SCOPE_USUARIO` e `SCOPE_ADMIN`.
-- Rotas públicas atuais: `POST /login`, `POST /usuarios`, `GET /categorias`, `GET /categorias/**`, `GET /anuncios/{id}`, `/swagger-ui/**`, `/v3/api-docs/**`. Todas as demais exigem token JWT válido (incluindo `GET /anuncios/meus` e `GET /anuncios/admin`).
+- Rotas públicas atuais: `POST /login`, `POST /usuarios`, `GET /categorias`, `GET /categorias/**`, `GET /anuncios`, `GET /anuncios/**`, `/swagger-ui/**`, `/v3/api-docs/**`. Todas as demais exigem token JWT válido (incluindo `GET /anuncios/meus` e `GET /anuncios/admin`).
 
 ---
 
@@ -119,7 +119,7 @@ br.com.guildcode.geekhub/
 ## 6. Collection do Postman
 
 - Arquivo: `geekhub/postman/geekhub.postman_collection.json`.
-- Estrutura: **1 pasta por recurso** (`usuarios`, `login`, ...), **1 request por endpoint** e **3 exemplos salvos (`response`)** por request (1 sucesso + 2 erros principais).
+- Estrutura: **1 pasta por recurso** (`usuarios`, `login`, ...), **1 request por endpoint** e **no mínimo 3 exemplos salvos (`response`)** por request (1 sucesso + 2 erros principais, podendo incluir exemplos extras em endpoints de pesquisa/filtros).
 - URLs de imagem de exemplo usam `https://picsum.photos/200`.
 
 ---

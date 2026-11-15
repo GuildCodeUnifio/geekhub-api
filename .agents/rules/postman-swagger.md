@@ -9,7 +9,7 @@ globs: "**/postman/**/*.json, **/openapi/**/*.java"
 2. **Collection do Postman (`geekhub/postman/geekhub.postman_collection.json`)**:
    - **1 pasta por recurso** (ex: `usuarios`, `login`, `produtos`).
    - **1 request por endpoint/ação** (ex: `cadastrar`, `listar`, `detalhar`, `editar`, `remover`).
-   - **Exatamente 3 exemplos salvos (`response`)** dentro de cada request (1 cenário de sucesso e 2 cenários de erro mais relevantes).
+   - **No mínimo 3 exemplos salvos (`response`)** dentro de cada request (1 cenário de sucesso e 2 cenários de erro mais relevantes, podendo adicionar exemplos extras em buscas e filtros combinados).
    - Endpoints protegidos usam Auth Bearer `{{token}}`.
    - Campos de URL de imagem usam `https://picsum.photos/200`.
    - Sempre validar a sintaxe JSON do arquivo após editar (`ConvertFrom-Json` ou `jq`).

@@ -8,6 +8,7 @@ import br.com.guildcode.geekhub.controller.anuncio.dto.response.CadastrarAnuncio
 import br.com.guildcode.geekhub.controller.anuncio.dto.response.DetalharAnuncioResponse;
 import br.com.guildcode.geekhub.controller.anuncio.dto.response.EditarAnuncioResponse;
 import br.com.guildcode.geekhub.controller.anuncio.dto.response.ListarAnuncioAdminResponse;
+import br.com.guildcode.geekhub.controller.anuncio.dto.response.ListarAnuncioResponse;
 import br.com.guildcode.geekhub.controller.anuncio.dto.response.ListarMeuAnuncioResponse;
 import br.com.guildcode.geekhub.controller.anuncio.dto.response.ResumoVendedorResponse;
 import br.com.guildcode.geekhub.exception.ConflitoException;
@@ -20,6 +21,7 @@ import br.com.guildcode.geekhub.service.anuncio.DetalharAnuncioService;
 import br.com.guildcode.geekhub.service.anuncio.EditarAnuncioService;
 import br.com.guildcode.geekhub.service.anuncio.ListarAnunciosAdminService;
 import br.com.guildcode.geekhub.service.anuncio.ListarMeusAnunciosService;
+import br.com.guildcode.geekhub.service.anuncio.PesquisarAnunciosService;
 import br.com.guildcode.geekhub.service.anuncio.RemoverAnuncioService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,11 +43,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static br.com.guildcode.geekhub.domain.anuncio.enums.CondicaoProduto.NOVO;
+import static br.com.guildcode.geekhub.domain.anuncio.enums.CondicaoProduto.USADO;
+import static br.com.guildcode.geekhub.domain.anuncio.enums.ConservacaoProduto.BOM;
 import static br.com.guildcode.geekhub.domain.anuncio.enums.ConservacaoProduto.EXCELENTE;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
@@ -72,6 +77,9 @@ class AnuncioControllerTest {
 
     @MockitoBean
     private CadastrarAnuncioService cadastrarAnuncioService;
+
+    @MockitoBean
+    private PesquisarAnunciosService pesquisarAnunciosService;
 
     @MockitoBean
     private DetalharAnuncioService detalharAnuncioService;
@@ -459,5 +467,124 @@ class AnuncioControllerTest {
                 .andExpect(jsonPath("$.content[0].vendedorNome").value("Vendedor GeekHub"));
 
         verify(listarAnunciosAdminService).listar(any(Pageable.class));
+    }
+
+    @Test
+    @DisplayName("Deve listar catálogo público de anúncios sem autenticação e retornar 200 OK")
+    void deveListarCatalogoPublicamenteSemAutenticacao() throws Exception {
+
+        // Arrange
+        ListarAnuncioResponse item = ListarAnuncioResponse.builder()
+                .id(1L)
+                .nome("Action figure Naruto 1ª edição")
+                .preco(BigDecimal.valueOf(1850.00))
+                .imagemPrincipal("https://picsum.photos/200")
+                .categoriaId(1L)
+                .categoriaNome("Figuras colecionáveis")
+                .condicao(NOVO)
+                .conservacao(EXCELENTE)
+                .quantidadeDisponivel(3)
+                .vendedorId(3L)
+                .vendedorNome("Vendedor GeekHub")
+                .criadoEm(LocalDateTime.of(2026, 1, 10, 12, 0))
+                .build();
+        Page<ListarAnuncioResponse> pagina = new PageImpl<>(List.of(item));
+
+        when(pesquisarAnunciosService.pesquisar(
+                isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), any(Pageable.class)))
+                .thenReturn(pagina);
+
+        // Act & Assert
+        mockMvc.perform(get("/anuncios"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[0].id").value(1L))
+                .andExpect(jsonPath("$.content[0].nome").value("Action figure Naruto 1ª edição"))
+                .andExpect(jsonPath("$.content[0].imagemPrincipal").value("https://picsum.photos/200"))
+                .andExpect(jsonPath("$.content[0].vendedorNome").value("Vendedor GeekHub"));
+
+        verify(pesquisarAnunciosService).pesquisar(
+                isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), any(Pageable.class));
+    }
+
+    @Test
+    @DisplayName("Deve pesquisar catálogo combinando todos os filtros opcionais")
+    void devePesquisarCatalogoComFiltrosCombinados() throws Exception {
+
+        // Arrange
+        ListarAnuncioResponse item = ListarAnuncioResponse.builder()
+                .id(3L)
+                .nome("Estátua Kakashi Hatake 18cm")
+                .preco(BigDecimal.valueOf(329.90))
+                .imagemPrincipal("https://picsum.photos/200")
+                .categoriaId(1L)
+                .categoriaNome("Figuras colecionáveis")
+                .condicao(USADO)
+                .conservacao(BOM)
+                .quantidadeDisponivel(2)
+                .vendedorId(3L)
+                .vendedorNome("Vendedor GeekHub")
+                .criadoEm(LocalDateTime.of(2026, 1, 10, 12, 0))
+                .build();
+        Page<ListarAnuncioResponse> pagina = new PageImpl<>(List.of(item));
+
+        when(pesquisarAnunciosService.pesquisar(
+                eq("kakashi"),
+                eq(1L),
+                eq(BigDecimal.valueOf(200)),
+                eq(BigDecimal.valueOf(400)),
+                eq(USADO),
+                eq(BOM),
+                eq(3L),
+                any(Pageable.class)))
+                .thenReturn(pagina);
+
+        // Act & Assert
+        mockMvc.perform(get("/anuncios")
+                        .param("nome", "kakashi")
+                        .param("categoriaId", "1")
+                        .param("precoMin", "200")
+                        .param("precoMax", "400")
+                        .param("condicao", "USADO")
+                        .param("conservacao", "BOM")
+                        .param("vendedorId", "3"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[0].id").value(3L))
+                .andExpect(jsonPath("$.content[0].condicao").value("USADO"))
+                .andExpect(jsonPath("$.content[0].conservacao").value("BOM"));
+    }
+
+    @Test
+    @DisplayName("Deve retornar página vazia com 200 OK quando nenhum anúncio corresponder aos filtros")
+    void deveRetornarPaginaVaziaNoCatalogoSemResultados() throws Exception {
+
+        // Arrange
+        when(pesquisarAnunciosService.pesquisar(
+                eq("inexistente"), isNull(), isNull(), isNull(), isNull(), isNull(), isNull(), any(Pageable.class)))
+                .thenReturn(Page.empty());
+
+        // Act & Assert
+        mockMvc.perform(get("/anuncios").param("nome", "inexistente"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").isEmpty())
+                .andExpect(jsonPath("$.totalElements").value(0));
+    }
+
+    @Test
+    @DisplayName("Deve retornar 400 Bad Request quando precoMin for maior que precoMax")
+    void deveRetornar400QuandoFaixaDePrecoInvalida() throws Exception {
+
+        // Arrange
+        when(pesquisarAnunciosService.pesquisar(
+                isNull(), isNull(), eq(BigDecimal.valueOf(500)), eq(BigDecimal.valueOf(100)),
+                isNull(), isNull(), isNull(), any(Pageable.class)))
+                .thenThrow(new NegocioException("Preço mínimo não pode ser maior que o preço máximo"));
+
+        // Act & Assert
+        mockMvc.perform(get("/anuncios")
+                        .param("precoMin", "500")
+                        .param("precoMax", "100"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.erro").value("Preço mínimo não pode ser maior que o preço máximo"));
     }
 }

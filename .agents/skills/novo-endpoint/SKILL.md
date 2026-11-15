@@ -53,5 +53,5 @@ Siga esta ordem exata para manter a arquitetura **camada > entidade > classe** d
 1. Crie Factories em `src/test/java/br/com/guildcode/geekhub/factory/<entidade>/`.
 2. Crie testes unitários (`@ExtendWith(MockitoExtension.class)`, `@DisplayName` em português, comentários `// Arrange`, `// Act`, `// Assert`) cobrindo **100%** das Services, Validators e Mappers.
 3. Se você criou alguma consulta personalizada com `@Query` (JPQL ou nativa) no `*Repository`, crie `<Entidade>RepositoryTest` (`@DataJpaTest`, `@AutoConfigureTestDatabase(replace = NONE)` e `@ActiveProfiles("test")`) testando **apenas** os métodos customizados criados por nós (não testar query methods derivados).
-4. Atualize `geekhub/postman/geekhub.postman_collection.json`: 1 pasta para o recurso, 1 request por ação, **3 exemplos de resposta** por request, usando `https://picsum.photos/200` para URLs de imagem.
+4. Atualize `geekhub/postman/geekhub.postman_collection.json`: 1 pasta para o recurso, 1 request por ação, **no mínimo 3 exemplos de resposta** por request (podendo adicionar exemplos extras em endpoints de busca/filtros), usando `https://picsum.photos/200` para URLs de imagem.
 5. Execute `/validar-entrega` para confirmar build, testes, `jacoco.csv` (100%) e JSON do Postman.

@@ -20,7 +20,7 @@ Execute este checklist completo antes de encerrar qualquer demanda na `geekhub-a
 1. Valide o JSON de `geekhub/postman/geekhub.postman_collection.json`:
    - PowerShell: `Get-Content -Raw geekhub/postman/geekhub.postman_collection.json | ConvertFrom-Json | Out-Null`
    - Linux: `jq empty geekhub/postman/geekhub.postman_collection.json`
-2. Confira se todo novo endpoint está na pasta do seu recurso e possui **3 exemplos salvos (`response`)**.
+2. Confira se todo novo endpoint está na pasta do seu recurso e possui **no mínimo 3 exemplos salvos (`response`)**.
 
 ## 3. Auditoria Arquitetural Rápida
 Verifique nos arquivos modificados/criados:

@@ -52,7 +52,7 @@ public class SecurityConfig {
                         .requestMatchers(POST, "/usuarios").permitAll()
                         .requestMatchers(GET, "/categorias", "/categorias/**").permitAll()
                         .requestMatchers(GET, "/anuncios/meus", "/anuncios/admin").authenticated()
-                        .requestMatchers(GET, "/anuncios/**").permitAll()
+                        .requestMatchers(GET, "/anuncios", "/anuncios/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()
                 )
