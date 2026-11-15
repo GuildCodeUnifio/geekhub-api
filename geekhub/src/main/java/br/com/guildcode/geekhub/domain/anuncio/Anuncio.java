@@ -31,6 +31,7 @@ import java.util.List;
 
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
+import static java.lang.Boolean.FALSE;
 import static java.util.Objects.isNull;
 import static org.hibernate.type.SqlTypes.VARCHAR;
 
@@ -99,5 +100,14 @@ public class Anuncio {
         }
 
         return this.imagens.getFirst();
+    }
+
+    public void descontarEstoque(Integer quantidade) {
+
+        this.quantidadeDisponivel -= quantidade;
+
+        if (this.quantidadeDisponivel <= 0) {
+            this.disponivel = FALSE;
+        }
     }
 }

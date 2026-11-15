@@ -7,8 +7,12 @@ import org.junit.jupiter.api.Test;
 import java.util.Collections;
 import java.util.List;
 
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class AnuncioTest {
 
@@ -52,5 +56,38 @@ class AnuncioTest {
 
         // Assert
         assertNull(imagemPrincipal);
+    }
+
+    @Test
+    @DisplayName("Deve descontar estoque mantendo anúncio disponível quando restar quantidade positiva")
+    void deveDescontarEstoqueMantendoDisponivelQuandoRestarEstoquePositivo() {
+        // Arrange
+        Anuncio anuncio = AnuncioFactory.get();
+        anuncio.setQuantidadeDisponivel(3);
+        anuncio.setDisponivel(TRUE);
+
+        // Act
+        anuncio.descontarEstoque(2);
+
+        // Assert
+        assertEquals(1, anuncio.getQuantidadeDisponivel());
+        assertTrue(anuncio.getDisponivel());
+    }
+
+    @Test
+    @DisplayName("Deve descontar estoque e marcar anúncio como indisponível quando estoque zerar")
+    void deveDescontarEstoqueEMarcarIndisponivelQuandoZerar() {
+        // Arrange
+        Anuncio anuncio = AnuncioFactory.get();
+        anuncio.setQuantidadeDisponivel(2);
+        anuncio.setDisponivel(TRUE);
+
+        // Act
+        anuncio.descontarEstoque(2);
+
+        // Assert
+        assertEquals(0, anuncio.getQuantidadeDisponivel());
+        assertFalse(anuncio.getDisponivel());
+        assertEquals(FALSE, anuncio.getDisponivel());
     }
 }
