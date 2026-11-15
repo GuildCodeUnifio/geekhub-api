@@ -7,12 +7,13 @@ description: Executa a bateria de validação completa da geekhub-api (mvnw test
 
 Execute este checklist completo antes de encerrar qualquer demanda na `geekhub-api`:
 
-## 1. Testes Unitários e Cobertura JaCoCo (100%)
+## 1. Testes e Cobertura JaCoCo (100%)
 1. Dentro de `geekhub/`, execute:
    - Windows: `.\mvnw.cmd test`
    - Linux/Dev Container: `./mvnw test`
 2. Confirme que todos os testes passaram (`Failures: 0, Errors: 0, Skipped: 0`).
-3. Leia `geekhub/target/site/jacoco/jacoco.csv` e verifique que **todas** as classes possuem `0` nas colunas `INSTRUCTION_MISSED`, `BRANCH_MISSED`, `LINE_MISSED`, `COMPLEXITY_MISSED` e `METHOD_MISSED`.
+3. Confirme que eventuais consultas personalizadas criadas com `@Query` (JPQL ou nativa) em `*Repository` possuem `*RepositoryTest` (`@DataJpaTest`, `@AutoConfigureTestDatabase(replace = NONE)` e `@ActiveProfiles("test")`) testando apenas esses métodos customizados.
+4. Leia `geekhub/target/site/jacoco/jacoco.csv` e verifique que **todas** as classes possuem `0` nas colunas `INSTRUCTION_MISSED`, `BRANCH_MISSED`, `LINE_MISSED`, `COMPLEXITY_MISSED` e `METHOD_MISSED`.
    - Se houver qualquer linha/branch não coberta, complete os testes antes de concluir.
 
 ## 2. Validação da Collection do Postman

@@ -14,12 +14,13 @@ tools:
 Você é o **QA Tester** do projeto **GeekHub API** (`geekhub-api`).
 
 ## Responsabilidades
-1. Ler as classes alvo em `service/`, `validator/`, `mapper/` e `exception/`.
+1. Ler as classes alvo em `service/`, `validator/`, `mapper/`, `exception/` e eventuais consultas personalizadas (`@Query`) em `repository/`.
 2. Criar ou atualizar Factories em `src/test/java/br/com/guildcode/geekhub/factory/<entidade>/`.
 3. Criar testes unitários em `src/test/java/...` espelhando exatamente a estrutura de pacotes de `src/main/java/`.
-4. Seguir obrigatoriamente:
-   - `@ExtendWith(MockitoExtension.class)` com `@InjectMocks` e `@Mock`.
+4. Para consultas personalizadas criadas manualmente com `@Query` (JPQL ou nativa) em `*Repository`, criar `*RepositoryTest` com `@DataJpaTest`, `@AutoConfigureTestDatabase(replace = NONE)` e `@ActiveProfiles("test")` testando **apenas** os métodos customizados criados (sem testar query methods derivados).
+5. Seguir obrigatoriamente:
+   - `@ExtendWith(MockitoExtension.class)` com `@InjectMocks` e `@Mock` (nos testes unitários).
    - `@DisplayName("...")` claro em português em todo método `@Test`.
    - Comentários `// Arrange`, `// Act`, `// Assert`.
    - Cobertura de todos os caminhos felizes, branches condicionais e exceções.
-5. Executar `.\mvnw.cmd test` (ou `./mvnw test` no Linux) e ler `target/site/jacoco/jacoco.csv` até confirmar **0** instruções, branches, linhas e métodos não cobertos em todas as classes analisadas.
+6. Executar `.\mvnw.cmd test` (ou `./mvnw test` no Linux) e ler `target/site/jacoco/jacoco.csv` até confirmar **0** instruções, branches, linhas e métodos não cobertos em todas as classes analisadas.
