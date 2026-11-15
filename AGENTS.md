@@ -10,7 +10,7 @@ Guia oficial da arquitetura, convenções de código, testes, migrações e flux
 - **Framework**: Spring Boot `4.1.2` (`spring-boot-starter-webmvc`, `data-jpa`, `validation`, `security`, `oauth2-resource-server`, `flyway`, `actuator`)
 - **Banco de Dados**: MySQL 8 (`ecommerce`), gerenciado via **Flyway** (`flyway-mysql`)
 - **Documentação OpenAPI**: SpringDoc OpenAPI `3.2.0` (`/swagger-ui.html`, `/v3/api-docs`)
-- **Utilitários & Testes**: Lombok, JUnit 5, Mockito, JaCoCo `0.8.12`
+- **Utilitários & Testes**: Lombok, JUnit 5, Mockito, H2 (testes de repositório), JaCoCo `0.8.12`
 
 ---
 
@@ -103,9 +103,10 @@ br.com.guildcode.geekhub/
 
 ---
 
-## 5. Testes Unitários e Cobertura JaCoCo (100%)
+## 5. Testes e Cobertura JaCoCo (100%)
 
 - Cobertura obrigatória de **100%** (instruções, branches, linhas e métodos) em todas as classes de `service`, `validator`, `mapper` e `GlobalExceptionHandler`.
+- **Repositórios (`*RepositoryTest`)**: escrever testes com `@DataJpaTest`, `@AutoConfigureTestDatabase(replace = NONE)` e `@ActiveProfiles("test")` (H2 em modo MySQL via `application-test.properties`) **apenas para métodos customizados com `@Query`** (JPQL ou nativa) criados manualmente; métodos derivados do Spring Data JPA não precisam de teste.
 - Todos os métodos de teste devem ter `@DisplayName("...")` em português e seguir o padrão **AAA comentado** (`// Arrange`, `// Act`, `// Assert`).
 - Criar massas de dados reutilizáveis em `src/test/java/br/com/guildcode/geekhub/factory/<entidade>/`.
 - Comando de verificação (executar dentro de `geekhub/`):
