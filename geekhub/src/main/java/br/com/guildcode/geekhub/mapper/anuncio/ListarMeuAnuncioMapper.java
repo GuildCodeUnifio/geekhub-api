@@ -4,16 +4,10 @@ import br.com.guildcode.geekhub.controller.anuncio.dto.response.ListarMeuAnuncio
 import br.com.guildcode.geekhub.domain.anuncio.Anuncio;
 import org.springframework.stereotype.Component;
 
-import static java.util.Objects.isNull;
-
 @Component
 public class ListarMeuAnuncioMapper {
 
     public ListarMeuAnuncioResponse toResponse(Anuncio entity) {
-
-        String imagemPrincipal = isNull(entity.getImagens()) || entity.getImagens().isEmpty()
-                ? null
-                : entity.getImagens().getFirst();
 
         return ListarMeuAnuncioResponse.builder()
                 .id(entity.getId())
@@ -24,7 +18,7 @@ public class ListarMeuAnuncioMapper {
                 .condicao(entity.getCondicao())
                 .conservacao(entity.getConservacao())
                 .categoriaNome(entity.getCategoria().getNome())
-                .imagemPrincipal(imagemPrincipal)
+                .imagemPrincipal(entity.obterImagemPrincipal())
                 .criadoEm(entity.getCriadoEm())
                 .build();
     }

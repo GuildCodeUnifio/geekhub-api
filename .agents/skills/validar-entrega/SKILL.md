@@ -28,6 +28,7 @@ Verifique nos arquivos modificados/criados:
 - Nenhum tipo primitivo (`boolean`, `int`, `long`, `double`) nas entidades, DTOs ou serviços.
 - Nenhum `*Validator` ou `*Repository` injetado diretamente em `*Controller`.
 - DTOs são `record` com `@Builder`; Controllers implementam `*ControllerOpenApi` sem `@Override` e possuem `@ResponseStatus`.
+- Cálculos/derivações próprias de entidades estão como métodos na `@Entity` (sem duplicação em Mappers) e possuem `<Entidade>Test` unitário.
 - Novas entidades/colunas possuem migration correspondente em `db/migration/`.
 
 ## 4. Saída Final

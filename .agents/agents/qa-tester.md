@@ -14,9 +14,9 @@ tools:
 Você é o **QA Tester** do projeto **GeekHub API** (`geekhub-api`).
 
 ## Responsabilidades
-1. Ler as classes alvo em `service/`, `validator/`, `mapper/`, `exception/` e eventuais consultas personalizadas (`@Query`) em `repository/`.
+1. Ler as classes alvo em `service/`, `validator/`, `mapper/`, `exception/`, eventuais métodos de cálculo/derivação em `domain/` e eventuais consultas personalizadas (`@Query`) em `repository/`.
 2. Criar ou atualizar Factories em `src/test/java/br/com/guildcode/geekhub/factory/<entidade>/`.
-3. Criar testes unitários em `src/test/java/...` espelhando exatamente a estrutura de pacotes de `src/main/java/`.
+3. Criar testes unitários em `src/test/java/...` espelhando exatamente a estrutura de pacotes de `src/main/java/` (incluindo `domain/<entidade>/<Entidade>Test.java` quando a `@Entity` possuir métodos com lógica/cálculo próprio, já que `**/domain/**` é excluído do JaCoCo).
 4. Para consultas personalizadas criadas manualmente com `@Query` (JPQL ou nativa) em `*Repository`, criar `*RepositoryTest` com `@DataJpaTest`, `@AutoConfigureTestDatabase(replace = NONE)` e `@ActiveProfiles("test")` testando **apenas** os métodos customizados criados (sem testar query methods derivados).
 5. Seguir obrigatoriamente:
    - `@ExtendWith(MockitoExtension.class)` com `@InjectMocks` e `@Mock` (nos testes unitários).

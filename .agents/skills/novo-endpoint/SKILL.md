@@ -11,7 +11,7 @@ Siga esta ordem exata para manter a arquitetura **camada > entidade > classe** d
 
 ## Passo 1: Banco de Dados e Domínio (se houver nova tabela/coluna)
 1. Crie ou incremente a migration em `geekhub/src/main/resources/db/migration/V<N>__<descricao>.sql` (ou ative `/nova-migracao`).
-2. Crie ou atualize a entidade em `domain/<entidade>/<Entidade>.java` (e eventuais enums em `domain/<entidade>/enums/<NomeDoEnum>.java`) usando apenas **Wrapper types** (`Long`, `Integer`, `Boolean`, `BigDecimal`), Lombok (`@Builder`, `@Getter`, `@Setter`, `@NoArgsConstructor`, `@AllArgsConstructor`, `@EqualsAndHashCode(of = "id")`) e mapeamento 100% compatível com `ddl-auto=validate`.
+2. Crie ou atualize a entidade em `domain/<entidade>/<Entidade>.java` (e eventuais enums em `domain/<entidade>/enums/<NomeDoEnum>.java`) usando apenas **Wrapper types** (`Long`, `Integer`, `Boolean`, `BigDecimal`), Lombok (`@Builder`, `@Getter`, `@Setter`, `@NoArgsConstructor`, `@AllArgsConstructor`, `@EqualsAndHashCode(of = "id")`) e mapeamento 100% compatível com `ddl-auto=validate`. Cálculos, derivações e consultas próprias do estado da entidade devem ser métodos na própria `@Entity` (ex.: `calcularSubtotal()`, `obterImagemPrincipal()`) para evitar duplicação nos Mappers.
 3. Crie o repositório em `repository/<entidade>/<Entidade>Repository.java` estendendo `JpaRepository<<Entidade>, Long>`.
 
 ---
@@ -27,7 +27,7 @@ Siga esta ordem exata para manter a arquitetura **camada > entidade > classe** d
 ## Passo 3: Validadores e Mappers
 1. **Validação de entrada** (quando necessário): `validator/<entidade>/<Acao><Entidade>Validator.java` (`@Component`), lançando `NegocioException`.
 2. **Validação de regra de negócio**: `service/<entidade>/validator/<Regra>ValidatorService.java` (`@Service`), lançando `ConflitoException` (`409`), `RecursoNaoEncontradoException` (`404`) ou `NegocioException` (`400`).
-3. **Mapper exclusivo da ação**: `mapper/<entidade>/<Acao><Entidade>Mapper.java` (`@Component`), convertendo `Request -> Entidade` e `Entidade -> Response` com `.builder()...build()`.
+3. **Mapper exclusivo da ação**: `mapper/<entidade>/<Acao><Entidade>Mapper.java` (`@Component`), fazendo apenas mapeamento declarativo `Request -> Entidade` e `Entidade -> Response` com `.builder()...build()` (consumindo métodos da entidade quando houver cálculo/derivação).
 
 ---
 
@@ -51,7 +51,7 @@ Siga esta ordem exata para manter a arquitetura **camada > entidade > classe** d
 
 ## Passo 5: Testes (100% JaCoCo) e Postman
 1. Crie Factories em `src/test/java/br/com/guildcode/geekhub/factory/<entidade>/`.
-2. Crie testes unitários (`@ExtendWith(MockitoExtension.class)`, `@DisplayName` em português, comentários `// Arrange`, `// Act`, `// Assert`) cobrindo **100%** das Services, Validators e Mappers.
+2. Crie testes unitários (`@ExtendWith(MockitoExtension.class)`, `@DisplayName` em português, comentários `// Arrange`, `// Act`, `// Assert`) cobrindo **100%** das Services, Validators e Mappers, além de `<Entidade>Test` em `domain/<entidade>/` sempre que a entidade possuir métodos com lógica/cálculo próprio.
 3. Se você criou alguma consulta personalizada com `@Query` (JPQL ou nativa) no `*Repository`, crie `<Entidade>RepositoryTest` (`@DataJpaTest`, `@AutoConfigureTestDatabase(replace = NONE)` e `@ActiveProfiles("test")`) testando **apenas** os métodos customizados criados por nós (não testar query methods derivados).
 4. Atualize `geekhub/postman/geekhub.postman_collection.json`: 1 pasta para o recurso, 1 request por ação, **no mínimo 3 exemplos de resposta** por request (podendo adicionar exemplos extras em endpoints de busca/filtros), usando `https://picsum.photos/200` para URLs de imagem.
 5. Execute `/validar-entrega` para confirmar build, testes, `jacoco.csv` (100%) e JSON do Postman.
