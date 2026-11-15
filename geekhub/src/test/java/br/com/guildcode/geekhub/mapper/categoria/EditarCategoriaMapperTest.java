@@ -1,0 +1,32 @@
+package br.com.guildcode.geekhub.mapper.categoria;
+
+import br.com.guildcode.geekhub.controller.categoria.dto.response.EditarCategoriaResponse;
+import br.com.guildcode.geekhub.domain.categoria.Categoria;
+import br.com.guildcode.geekhub.factory.categoria.CategoriaFactory;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class EditarCategoriaMapperTest {
+
+    private final EditarCategoriaMapper mapper = new EditarCategoriaMapper();
+
+    @Test
+    @DisplayName("Deve mapear entidade Categoria para EditarCategoriaResponse")
+    void deveMapearEntidadeParaResponse() {
+
+        // Arrange
+        Categoria categoria = CategoriaFactory.get();
+
+        // Act
+        EditarCategoriaResponse response = mapper.toResponse(categoria);
+
+        // Assert
+        assertEquals(categoria.getId(), response.id());
+        assertEquals(categoria.getNome(), response.nome());
+        assertEquals(categoria.getDescricao(), response.descricao());
+        assertEquals(categoria.getAtiva(), response.ativa());
+        assertEquals(categoria.getCriadoEm(), response.criadoEm());
+    }
+}

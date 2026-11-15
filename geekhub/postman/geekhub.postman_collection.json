@@ -830,6 +830,674 @@
           ]
         }
       ]
+    },
+    {
+      "name": "categorias",
+      "item": [
+        {
+          "name": "cadastrar",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Board Games\",\n  \"descricao\": \"Jogos de tabuleiro modernos, expansões e acessórios\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/categorias",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categorias"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nome\": \"Board Games\",\n  \"descricao\": \"Jogos de tabuleiro modernos, expansões e acessórios\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/categorias",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "categorias"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 6,\n  \"nome\": \"Board Games\",\n  \"descricao\": \"Jogos de tabuleiro modernos, expansões e acessórios\",\n  \"ativa\": true,\n  \"criadoEm\": \"2026-11-15T17:20:00.000000\"\n}"
+            },
+            {
+              "name": "400 Bad Request (dados invalidos)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nome\": \"\",\n  \"descricao\": \"Descrição válida\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/categorias",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "categorias"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"timestamp\": \"2026-11-15T17:20:00.000000\",\n  \"status\": 400,\n  \"erro\": \"é obrigatório\",\n  \"detalhes\": [\n    \"nome: é obrigatório\"\n  ]\n}"
+            },
+            {
+              "name": "409 Conflict (categoria ja cadastrada)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nome\": \"Figuras colecionáveis\",\n  \"descricao\": \"Categoria duplicada\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/categorias",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "categorias"
+                  ]
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"timestamp\": \"2026-11-15T17:20:00.000000\",\n  \"status\": 409,\n  \"erro\": \"Categoria já cadastrada\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "listar",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categorias",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categorias"
+              ],
+              "query": [
+                {
+                  "key": "ativa",
+                  "value": "true",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (pagina de categorias retornada)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/categorias",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "categorias"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"content\": [\n    {\n      \"id\": 1,\n      \"nome\": \"Figuras colecionáveis\",\n      \"descricao\": \"Action figures, estátuas e colecionáveis em escala\",\n      \"ativa\": true,\n      \"criadoEm\": \"2026-11-13T18:05:00.000000\"\n    },\n    {\n      \"id\": 5,\n      \"nome\": \"Cartas Colecionáveis\",\n      \"descricao\": \"Categoria desativada para testes de validação de negócio\",\n      \"ativa\": false,\n      \"criadoEm\": \"2026-11-13T18:05:00.000000\"\n    }\n  ],\n  \"totalElements\": 5,\n  \"totalPages\": 1,\n  \"size\": 10,\n  \"number\": 0\n}"
+            },
+            {
+              "name": "200 OK (filtrando apenas categorias ativas)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/categorias?ativa=true",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "categorias"
+                  ],
+                  "query": [
+                    {
+                      "key": "ativa",
+                      "value": "true"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"content\": [\n    {\n      \"id\": 1,\n      \"nome\": \"Figuras colecionáveis\",\n      \"descricao\": \"Action figures, estátuas e colecionáveis em escala\",\n      \"ativa\": true,\n      \"criadoEm\": \"2026-11-13T18:05:00.000000\"\n    },\n    {\n      \"id\": 2,\n      \"nome\": \"Quadrinhos e mangás\",\n      \"descricao\": \"HQs, mangás e edições especiais de colecionador\",\n      \"ativa\": true,\n      \"criadoEm\": \"2026-11-13T18:05:00.000000\"\n    }\n  ],\n  \"totalElements\": 4,\n  \"totalPages\": 1,\n  \"size\": 10,\n  \"number\": 0\n}"
+            },
+            {
+              "name": "200 OK (pagina vazia)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/categorias?page=5",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "categorias"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "5"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"content\": [],\n  \"totalElements\": 5,\n  \"totalPages\": 1,\n  \"size\": 10,\n  \"number\": 5\n}"
+            }
+          ]
+        },
+        {
+          "name": "detalhar",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categorias/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categorias",
+                "1"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (categoria ativa)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/categorias/1",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "categorias",
+                    "1"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 1,\n  \"nome\": \"Figuras colecionáveis\",\n  \"descricao\": \"Action figures, estátuas e colecionáveis em escala\",\n  \"ativa\": true,\n  \"criadoEm\": \"2026-11-13T18:05:00.000000\"\n}"
+            },
+            {
+              "name": "200 OK (categoria inativa)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/categorias/5",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "categorias",
+                    "5"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 5,\n  \"nome\": \"Cartas Colecionáveis\",\n  \"descricao\": \"Categoria desativada para testes de validação de negócio\",\n  \"ativa\": false,\n  \"criadoEm\": \"2026-11-13T18:05:00.000000\"\n}"
+            },
+            {
+              "name": "404 Not Found (categoria nao encontrada)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/categorias/999",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "categorias",
+                    "999"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"timestamp\": \"2026-11-15T17:20:00.000000\",\n  \"status\": 404,\n  \"erro\": \"Categoria não encontrada\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "editar",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Figuras Colecionáveis Edição Limitada\",\n  \"descricao\": \"Action figures, estátuas e colecionáveis em escala atualizados\",\n  \"ativa\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/categorias/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categorias",
+                "1"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nome\": \"Figuras Colecionáveis Edição Limitada\",\n  \"descricao\": \"Action figures, estátuas e colecionáveis em escala atualizados\",\n  \"ativa\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/categorias/1",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "categorias",
+                    "1"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 1,\n  \"nome\": \"Figuras Colecionáveis Edição Limitada\",\n  \"descricao\": \"Action figures, estátuas e colecionáveis em escala atualizados\",\n  \"ativa\": true,\n  \"criadoEm\": \"2026-11-13T18:05:00.000000\"\n}"
+            },
+            {
+              "name": "404 Not Found (categoria nao encontrada)",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nome\": \"Board Games\",\n  \"descricao\": \"Descrição\",\n  \"ativa\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/categorias/999",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "categorias",
+                    "999"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"timestamp\": \"2026-11-15T17:20:00.000000\",\n  \"status\": 404,\n  \"erro\": \"Categoria não encontrada\"\n}"
+            },
+            {
+              "name": "409 Conflict (categoria ja cadastrada)",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nome\": \"Jogos\",\n  \"descricao\": \"Nome já usado por outra categoria\",\n  \"ativa\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/categorias/1",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "categorias",
+                    "1"
+                  ]
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"timestamp\": \"2026-11-15T17:20:00.000000\",\n  \"status\": 409,\n  \"erro\": \"Categoria já cadastrada\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "remover",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categorias/3",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categorias",
+                "3"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "204 No Content (categoria removida)",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/categorias/3",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "categorias",
+                    "3"
+                  ]
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": ""
+            },
+            {
+              "name": "403 Forbidden (sem permissao de admin)",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/categorias/3",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "categorias",
+                    "3"
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"timestamp\": \"2026-11-15T17:20:00.000000\",\n  \"status\": 403,\n  \"erro\": \"Acesso negado: você não possui permissão para realizar esta operação.\"\n}"
+            },
+            {
+              "name": "409 Conflict (categoria com anuncios vinculados)",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/categorias/1",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "categorias",
+                    "1"
+                  ]
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"timestamp\": \"2026-11-15T17:20:00.000000\",\n  \"status\": 409,\n  \"erro\": \"Não é possível remover categoria com anúncios vinculados\"\n}"
+            }
+          ]
+        }
+      ]
     }
   ],
   "variable": [
