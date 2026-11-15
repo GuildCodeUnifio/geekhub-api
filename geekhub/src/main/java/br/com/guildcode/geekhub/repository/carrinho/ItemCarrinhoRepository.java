@@ -15,4 +15,6 @@ public interface ItemCarrinhoRepository extends JpaRepository<ItemCarrinho, Long
     List<ItemCarrinho> findByCompradorIdOrderByCriadoEmDesc(Long compradorId);
 
     Page<ItemCarrinho> findByCompradorId(Long compradorId, Pageable pageable);
+
+    void deleteByCompradorId(Long compradorId);
 }

@@ -1,9 +1,11 @@
 package br.com.guildcode.geekhub.openapi.carrinho;
 
 import br.com.guildcode.geekhub.controller.carrinho.dto.request.AdicionarItemCarrinhoRequest;
+import br.com.guildcode.geekhub.controller.carrinho.dto.request.EditarItemCarrinhoRequest;
 import br.com.guildcode.geekhub.controller.carrinho.dto.response.AdicionarItemCarrinhoResponse;
 import br.com.guildcode.geekhub.controller.carrinho.dto.response.ConsultarCarrinhoResponse;
 import br.com.guildcode.geekhub.controller.carrinho.dto.response.DetalharItemCarrinhoResponse;
+import br.com.guildcode.geekhub.controller.carrinho.dto.response.EditarItemCarrinhoResponse;
 import br.com.guildcode.geekhub.controller.carrinho.dto.response.ListarItemCarrinhoResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -46,4 +48,30 @@ public interface CarrinhoControllerOpenApi {
             @ApiResponse(responseCode = "404", description = "Item do carrinho não encontrado")
     })
     DetalharItemCarrinhoResponse detalharItem(Long id);
+
+    @Operation(summary = "Atualizar quantidade de um item do carrinho")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Quantidade do item atualizada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Quantidade inválida, anúncio indisponível ou acima do estoque"),
+            @ApiResponse(responseCode = "401", description = "Token ausente ou inválido"),
+            @ApiResponse(responseCode = "403", description = "Item pertence a outro comprador"),
+            @ApiResponse(responseCode = "404", description = "Item do carrinho não encontrado")
+    })
+    EditarItemCarrinhoResponse editarItem(Long id, EditarItemCarrinhoRequest request);
+
+    @Operation(summary = "Remover item específico do carrinho")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Item removido do carrinho com sucesso"),
+            @ApiResponse(responseCode = "401", description = "Token ausente ou inválido"),
+            @ApiResponse(responseCode = "403", description = "Item pertence a outro comprador"),
+            @ApiResponse(responseCode = "404", description = "Item do carrinho não encontrado")
+    })
+    void removerItem(Long id);
+
+    @Operation(summary = "Esvaziar todos os itens do carrinho do comprador autenticado")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Carrinho esvaziado com sucesso"),
+            @ApiResponse(responseCode = "401", description = "Token ausente ou inválido")
+    })
+    void limpar();
 }
