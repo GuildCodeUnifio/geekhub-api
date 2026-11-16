@@ -2,12 +2,6 @@
 
 Este documento descreve o fluxo de cadastro de usuário e o fluxo de autenticação na API do GeekHub.
 
-## Regras de escrita aplicada (ASD-STE100 adaptado ao PT-BR)
-
-- Cada etapa descreve uma única ação.
-- As frases usam voz ativa e termos técnicos consistentes com o código-fonte.
-- Os participantes correspondem exatamente às classes e tabelas da camada atual da aplicação.
-
 ---
 
 ## 1. Fluxo de Cadastro de Usuário (`POST /usuarios`)

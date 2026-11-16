@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -35,7 +36,7 @@ public interface PedidoControllerOpenApi {
     })
     Page<ListarCompraResponse> listarCompras(
             @Parameter(description = "Filtro opcional pelo estado atual do pedido") EstadoPedido estado,
-            Pageable pageable);
+            @ParameterObject Pageable pageable);
 
     @Operation(summary = "Listar vendas recebidas contendo anúncios do usuário autenticado")
     @ApiResponses({
@@ -44,7 +45,7 @@ public interface PedidoControllerOpenApi {
     })
     Page<ListarVendaResponse> listarVendas(
             @Parameter(description = "Filtro opcional pelo estado atual do pedido") EstadoPedido estado,
-            Pageable pageable);
+            @ParameterObject Pageable pageable);
 
     @Operation(summary = "Listar todos os pedidos da plataforma (ADMIN)")
     @ApiResponses({
@@ -52,7 +53,7 @@ public interface PedidoControllerOpenApi {
             @ApiResponse(responseCode = "401", description = "Token ausente ou inválido"),
             @ApiResponse(responseCode = "403", description = "Acesso negado")
     })
-    Page<ListarPedidoAdminResponse> listarTodos(Pageable pageable);
+    Page<ListarPedidoAdminResponse> listarTodos(@ParameterObject Pageable pageable);
 
     @Operation(summary = "Detalhar pedido por ID com itens congelados e histórico cronológico")
     @ApiResponses({
@@ -61,7 +62,7 @@ public interface PedidoControllerOpenApi {
             @ApiResponse(responseCode = "403", description = "Usuário sem permissão para visualizar o pedido"),
             @ApiResponse(responseCode = "404", description = "Pedido não encontrado")
     })
-    DetalharPedidoResponse detalhar(Long id);
+    DetalharPedidoResponse detalhar(@Parameter(description = "ID do pedido") Long id);
 
     @Operation(summary = "Atualizar estado do pedido (avanço de entrega ou cancelamento com estorno de estoque)")
     @ApiResponses({
@@ -71,7 +72,9 @@ public interface PedidoControllerOpenApi {
             @ApiResponse(responseCode = "403", description = "Usuário sem permissão para atualizar o estado deste pedido"),
             @ApiResponse(responseCode = "404", description = "Pedido não encontrado")
     })
-    AtualizarEstadoPedidoResponse atualizarEstado(Long id, AtualizarEstadoPedidoRequest request);
+    AtualizarEstadoPedidoResponse atualizarEstado(
+            @Parameter(description = "ID do pedido") Long id,
+            AtualizarEstadoPedidoRequest request);
 
     @Operation(summary = "Remover pedido por ID (ADMIN)")
     @ApiResponses({
@@ -81,5 +84,5 @@ public interface PedidoControllerOpenApi {
             @ApiResponse(responseCode = "404", description = "Pedido não encontrado"),
             @ApiResponse(responseCode = "409", description = "Não é possível remover pedido com avaliação vinculada")
     })
-    void remover(Long id);
+    void remover(@Parameter(description = "ID do pedido") Long id);
 }
