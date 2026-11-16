@@ -27,10 +27,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static br.com.guildcode.geekhub.domain.pedido.enums.EstadoPedido.CONCLUIDO;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static java.math.BigDecimal.ZERO;
 import static java.math.RoundingMode.HALF_UP;
+import static java.util.Objects.isNull;
 import static org.hibernate.type.SqlTypes.VARCHAR;
 
 @Entity
@@ -116,5 +118,19 @@ public class Pedido {
 
         return this.itens.stream()
                 .anyMatch(item -> item.getVendedorId().equals(vendedorId));
+    }
+
+    public Boolean isConcluido() {
+
+        return CONCLUIDO.equals(this.estado);
+    }
+
+    public Long obterVendedorId() {
+
+        if (isNull(this.itens) || this.itens.isEmpty()) {
+            return null;
+        }
+
+        return this.itens.getFirst().getVendedorId();
     }
 }

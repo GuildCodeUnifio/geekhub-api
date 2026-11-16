@@ -9,9 +9,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static br.com.guildcode.geekhub.domain.pedido.enums.EstadoPedido.CONCLUIDO;
 import static br.com.guildcode.geekhub.domain.pedido.enums.EstadoPedido.CONFIRMADO;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PedidoTest {
@@ -88,5 +90,34 @@ class PedidoTest {
         assertFalse(pedido.pertenceAoComprador(50L));
         assertTrue(pedido.possuiVendedor(2L));
         assertFalse(pedido.possuiVendedor(50L));
+    }
+
+    @Test
+    @DisplayName("Deve identificar quando pedido está no estado CONCLUIDO")
+    void deveIdentificarQuandoPedidoEstaConcluido() {
+        // Arrange
+        Pedido pedido = PedidoFactory.get();
+
+        // Act & Assert
+        assertFalse(pedido.isConcluido());
+
+        pedido.setEstado(CONCLUIDO);
+        assertTrue(pedido.isConcluido());
+    }
+
+    @Test
+    @DisplayName("Deve retornar ID do vendedor principal dos itens ou nulo quando sem itens")
+    void deveObterVendedorIdDosItensOuNuloQuandoSemItens() {
+        // Arrange
+        Pedido pedido = PedidoFactory.get();
+
+        // Act & Assert
+        assertEquals(2L, pedido.obterVendedorId());
+
+        pedido.setItens(new ArrayList<>());
+        assertNull(pedido.obterVendedorId());
+
+        pedido.setItens(null);
+        assertNull(pedido.obterVendedorId());
     }
 }
