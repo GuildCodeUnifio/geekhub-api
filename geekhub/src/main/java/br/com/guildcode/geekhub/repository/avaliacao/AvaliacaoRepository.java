@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface AvaliacaoRepository extends JpaRepository<Avaliacao, Long> {
 
+    Boolean existsByPedidoId(Long pedidoId);
+
     @Query("SELECT AVG(a.nota) FROM Avaliacao a WHERE a.vendedor.id = :vendedorId")
     Double calcularNotaMediaPorVendedorId(Long vendedorId);
 
