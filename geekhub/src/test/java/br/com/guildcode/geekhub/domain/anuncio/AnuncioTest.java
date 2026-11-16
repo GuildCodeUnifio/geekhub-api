@@ -90,4 +90,52 @@ class AnuncioTest {
         assertFalse(anuncio.getDisponivel());
         assertEquals(FALSE, anuncio.getDisponivel());
     }
+
+    @Test
+    @DisplayName("Deve estornar estoque e reativar anúncio quando estava indisponível por falta de estoque")
+    void deveEstornarEstoqueEReativarAnuncioQuandoEstavaEsgotado() {
+        // Arrange
+        Anuncio anuncio = AnuncioFactory.get();
+        anuncio.setQuantidadeDisponivel(0);
+        anuncio.setDisponivel(FALSE);
+
+        // Act
+        anuncio.estornarEstoque(2);
+
+        // Assert
+        assertEquals(2, anuncio.getQuantidadeDisponivel());
+        assertTrue(anuncio.getDisponivel());
+    }
+
+    @Test
+    @DisplayName("Deve somar quantidade estornada mantendo anúncio disponível quando já havia estoque")
+    void deveSomarQuantidadeEstornadaQuandoJaHaviaEstoque() {
+        // Arrange
+        Anuncio anuncio = AnuncioFactory.get();
+        anuncio.setQuantidadeDisponivel(3);
+        anuncio.setDisponivel(TRUE);
+
+        // Act
+        anuncio.estornarEstoque(2);
+
+        // Assert
+        assertEquals(5, anuncio.getQuantidadeDisponivel());
+        assertTrue(anuncio.getDisponivel());
+    }
+
+    @Test
+    @DisplayName("Deve manter anúncio indisponível quando quantidade permanecer zerada após estorno")
+    void deveManterIndisponivelQuandoEstoquePermaneceZerado() {
+        // Arrange
+        Anuncio anuncio = AnuncioFactory.get();
+        anuncio.setQuantidadeDisponivel(0);
+        anuncio.setDisponivel(FALSE);
+
+        // Act
+        anuncio.estornarEstoque(0);
+
+        // Assert
+        assertEquals(0, anuncio.getQuantidadeDisponivel());
+        assertFalse(anuncio.getDisponivel());
+    }
 }

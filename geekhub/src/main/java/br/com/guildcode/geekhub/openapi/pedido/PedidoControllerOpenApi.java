@@ -1,5 +1,7 @@
 package br.com.guildcode.geekhub.openapi.pedido;
 
+import br.com.guildcode.geekhub.controller.pedido.dto.request.AtualizarEstadoPedidoRequest;
+import br.com.guildcode.geekhub.controller.pedido.dto.response.AtualizarEstadoPedidoResponse;
 import br.com.guildcode.geekhub.controller.pedido.dto.response.CriarPedidoResponse;
 import br.com.guildcode.geekhub.controller.pedido.dto.response.DetalharPedidoResponse;
 import br.com.guildcode.geekhub.controller.pedido.dto.response.ListarCompraResponse;
@@ -60,4 +62,24 @@ public interface PedidoControllerOpenApi {
             @ApiResponse(responseCode = "404", description = "Pedido não encontrado")
     })
     DetalharPedidoResponse detalhar(Long id);
+
+    @Operation(summary = "Atualizar estado do pedido (avanço de entrega ou cancelamento com estorno de estoque)")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Estado do pedido atualizado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos ou transição de estado não permitida"),
+            @ApiResponse(responseCode = "401", description = "Token ausente ou inválido"),
+            @ApiResponse(responseCode = "403", description = "Usuário sem permissão para atualizar o estado deste pedido"),
+            @ApiResponse(responseCode = "404", description = "Pedido não encontrado")
+    })
+    AtualizarEstadoPedidoResponse atualizarEstado(Long id, AtualizarEstadoPedidoRequest request);
+
+    @Operation(summary = "Remover pedido por ID (ADMIN)")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Pedido removido com sucesso"),
+            @ApiResponse(responseCode = "401", description = "Token ausente ou inválido"),
+            @ApiResponse(responseCode = "403", description = "Acesso negado"),
+            @ApiResponse(responseCode = "404", description = "Pedido não encontrado"),
+            @ApiResponse(responseCode = "409", description = "Não é possível remover pedido com avaliação vinculada")
+    })
+    void remover(Long id);
 }

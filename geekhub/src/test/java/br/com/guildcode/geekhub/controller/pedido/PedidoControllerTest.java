@@ -2,6 +2,8 @@ package br.com.guildcode.geekhub.controller.pedido;
 
 import br.com.guildcode.geekhub.config.CorsConfig;
 import br.com.guildcode.geekhub.config.SecurityConfig;
+import br.com.guildcode.geekhub.controller.pedido.dto.request.AtualizarEstadoPedidoRequest;
+import br.com.guildcode.geekhub.controller.pedido.dto.response.AtualizarEstadoPedidoResponse;
 import br.com.guildcode.geekhub.controller.pedido.dto.response.CriarPedidoResponse;
 import br.com.guildcode.geekhub.controller.pedido.dto.response.DetalharPedidoResponse;
 import br.com.guildcode.geekhub.controller.pedido.dto.response.EventoPedidoResponse;
@@ -12,11 +14,14 @@ import br.com.guildcode.geekhub.controller.pedido.dto.response.ListarVendaRespon
 import br.com.guildcode.geekhub.exception.ConflitoException;
 import br.com.guildcode.geekhub.exception.NegocioException;
 import br.com.guildcode.geekhub.exception.RecursoNaoEncontradoException;
+import br.com.guildcode.geekhub.factory.pedido.AtualizarEstadoPedidoRequestFactory;
+import br.com.guildcode.geekhub.service.pedido.AtualizarEstadoPedidoService;
 import br.com.guildcode.geekhub.service.pedido.CriarPedidoService;
 import br.com.guildcode.geekhub.service.pedido.DetalharPedidoService;
 import br.com.guildcode.geekhub.service.pedido.ListarMinhasComprasService;
 import br.com.guildcode.geekhub.service.pedido.ListarMinhasVendasService;
 import br.com.guildcode.geekhub.service.pedido.ListarTodosPedidosService;
+import br.com.guildcode.geekhub.service.pedido.RemoverPedidoService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +34,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import tools.jackson.databind.ObjectMapper;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -42,12 +48,17 @@ import static java.lang.Boolean.FALSE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -57,6 +68,9 @@ class PedidoControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @MockitoBean
     private CriarPedidoService criarPedidoService;
@@ -72,6 +86,12 @@ class PedidoControllerTest {
 
     @MockitoBean
     private DetalharPedidoService detalharPedidoService;
+
+    @MockitoBean
+    private AtualizarEstadoPedidoService atualizarEstadoPedidoService;
+
+    @MockitoBean
+    private RemoverPedidoService removerPedidoService;
 
     @Test
     @DisplayName("Deve retornar 401 ao tentar criar pedido sem autenticação")
@@ -373,5 +393,190 @@ class PedidoControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.status").value(404))
                 .andExpect(jsonPath("$.erro").value("Pedido não encontrado"));
+    }
+
+    @Test
+    @DisplayName("Deve retornar 401 ao atualizar estado do pedido sem autenticação")
+    void deveRetornar401AoAtualizarEstadoSemAutenticacao() throws Exception {
+        // Arrange
+        AtualizarEstadoPedidoRequest request = AtualizarEstadoPedidoRequestFactory.get();
+
+        // Act & Assert
+        mockMvc.perform(put("/pedidos/1")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isUnauthorized());
+
+        verifyNoInteractions(atualizarEstadoPedidoService);
+    }
+
+    @Test
+    @DisplayName("Deve atualizar estado do pedido e retornar 200 OK com histórico atualizado")
+    void deveAtualizarEstadoDoPedidoComSucesso() throws Exception {
+        // Arrange
+        LocalDateTime criadoEm = LocalDateTime.of(2026, 11, 13, 18, 30);
+        LocalDateTime confirmadoEm = LocalDateTime.of(2026, 11, 15, 21, 0);
+        AtualizarEstadoPedidoRequest request = AtualizarEstadoPedidoRequestFactory.get(CONFIRMADO);
+        AtualizarEstadoPedidoResponse response = AtualizarEstadoPedidoResponse.builder()
+                .id(1L)
+                .estado(CONFIRMADO)
+                .historico(List.of(
+                        EventoPedidoResponse.builder().estado(CRIADO).ocorridoEm(criadoEm).build(),
+                        EventoPedidoResponse.builder().estado(CONFIRMADO).ocorridoEm(confirmadoEm).build()))
+                .avaliado(FALSE)
+                .build();
+
+        when(atualizarEstadoPedidoService.atualizar(1L, request)).thenReturn(response);
+
+        // Act & Assert
+        mockMvc.perform(put("/pedidos/1")
+                        .with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_USUARIO")))
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.estado").value("CONFIRMADO"))
+                .andExpect(jsonPath("$.avaliado").value(false))
+                .andExpect(jsonPath("$.historico[0].estado").value("CRIADO"))
+                .andExpect(jsonPath("$.historico[1].estado").value("CONFIRMADO"));
+    }
+
+    @Test
+    @DisplayName("Deve retornar 400 quando estado na requisição for nulo ao atualizar pedido")
+    void deveRetornar400QuandoEstadoNuloNaRequisicao() throws Exception {
+        // Arrange
+        AtualizarEstadoPedidoRequest request = AtualizarEstadoPedidoRequestFactory.get(null);
+
+        // Act & Assert
+        mockMvc.perform(put("/pedidos/1")
+                        .with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_USUARIO")))
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.erro").value("é obrigatório"));
+
+        verifyNoInteractions(atualizarEstadoPedidoService);
+    }
+
+    @Test
+    @DisplayName("Deve retornar 400 quando transição de estado for inválida")
+    void deveRetornar400QuandoTransicaoInvalida() throws Exception {
+        // Arrange
+        AtualizarEstadoPedidoRequest request = AtualizarEstadoPedidoRequestFactory.get(CONCLUIDO);
+        when(atualizarEstadoPedidoService.atualizar(1L, request))
+                .thenThrow(new NegocioException("Transição de estado inválida de CRIADO para CONCLUIDO"));
+
+        // Act & Assert
+        mockMvc.perform(put("/pedidos/1")
+                        .with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_USUARIO")))
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.erro").value("Transição de estado inválida de CRIADO para CONCLUIDO"));
+    }
+
+    @Test
+    @DisplayName("Deve retornar 403 quando usuário sem permissão tentar atualizar estado do pedido")
+    void deveRetornar403AoAtualizarEstadoSemPermissao() throws Exception {
+        // Arrange
+        AtualizarEstadoPedidoRequest request = AtualizarEstadoPedidoRequestFactory.get(CONFIRMADO);
+        when(atualizarEstadoPedidoService.atualizar(1L, request))
+                .thenThrow(new AccessDeniedException("Você não possui permissão para avançar o estado deste pedido"));
+
+        // Act & Assert
+        mockMvc.perform(put("/pedidos/1")
+                        .with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_USUARIO")))
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.status").value(403));
+    }
+
+    @Test
+    @DisplayName("Deve retornar 404 ao tentar atualizar estado de pedido inexistente")
+    void deveRetornar404AoAtualizarPedidoInexistente() throws Exception {
+        // Arrange
+        AtualizarEstadoPedidoRequest request = AtualizarEstadoPedidoRequestFactory.get(CONFIRMADO);
+        when(atualizarEstadoPedidoService.atualizar(999L, request))
+                .thenThrow(new RecursoNaoEncontradoException("Pedido não encontrado"));
+
+        // Act & Assert
+        mockMvc.perform(put("/pedidos/999")
+                        .with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_USUARIO")))
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.erro").value("Pedido não encontrado"));
+    }
+
+    @Test
+    @DisplayName("Deve retornar 401 ao remover pedido sem autenticação")
+    void deveRetornar401AoRemoverPedidoSemAutenticacao() throws Exception {
+        // Act & Assert
+        mockMvc.perform(delete("/pedidos/1"))
+                .andExpect(status().isUnauthorized());
+
+        verifyNoInteractions(removerPedidoService);
+    }
+
+    @Test
+    @DisplayName("Deve retornar 403 quando usuário comum tentar remover pedido")
+    void deveRetornar403QuandoUsuarioComumRemoverPedido() throws Exception {
+        // Act & Assert
+        mockMvc.perform(delete("/pedidos/1")
+                        .with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_USUARIO"))))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.status").value(403));
+
+        verifyNoInteractions(removerPedidoService);
+    }
+
+    @Test
+    @DisplayName("Deve remover pedido sem avaliação vinculada quando usuário possuir permissão ADMIN")
+    void deveRemoverPedidoComSucessoParaAdmin() throws Exception {
+        // Arrange
+        doNothing().when(removerPedidoService).remover(1L);
+
+        // Act & Assert
+        mockMvc.perform(delete("/pedidos/1")
+                        .with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_ADMIN"))))
+                .andExpect(status().isNoContent());
+
+        verify(removerPedidoService).remover(1L);
+    }
+
+    @Test
+    @DisplayName("Deve retornar 404 quando ADMIN tentar remover pedido inexistente")
+    void deveRetornar404QuandoAdminRemoverPedidoInexistente() throws Exception {
+        // Arrange
+        doThrow(new RecursoNaoEncontradoException("Pedido não encontrado"))
+                .when(removerPedidoService)
+                .remover(999L);
+
+        // Act & Assert
+        mockMvc.perform(delete("/pedidos/999")
+                        .with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_ADMIN"))))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.erro").value("Pedido não encontrado"));
+    }
+
+    @Test
+    @DisplayName("Deve retornar 409 quando ADMIN tentar remover pedido com avaliação vinculada")
+    void deveRetornar409QuandoAdminRemoverPedidoComAvaliacao() throws Exception {
+        // Arrange
+        doThrow(new ConflitoException("Não é possível remover pedido pois possui avaliação vinculada"))
+                .when(removerPedidoService)
+                .remover(4L);
+
+        // Act & Assert
+        mockMvc.perform(delete("/pedidos/4")
+                        .with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_ADMIN"))))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.status").value(409))
+                .andExpect(jsonPath("$.erro").value("Não é possível remover pedido pois possui avaliação vinculada"));
     }
 }
