@@ -4,6 +4,10 @@ import br.com.guildcode.geekhub.factory.usuario.UsuarioFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -52,5 +56,36 @@ class UsuarioTest {
 
         // Assert
         assertFalse(isAdmin);
+    }
+
+    @Test
+    @DisplayName("Deve promover usuário comum para ADMIN sem duplicar se já possuir")
+    void devePromoverUsuarioParaAdminSemDuplicar() {
+
+        // Arrange
+        Usuario usuario = UsuarioFactory.get();
+
+        // Act
+        usuario.atualizarPermissaoAdmin(TRUE);
+        usuario.atualizarPermissaoAdmin(TRUE);
+
+        // Assert
+        assertTrue(usuario.isAdmin());
+        assertEquals(List.of("USUARIO", "ADMIN"), usuario.obterNomesPermissoes());
+    }
+
+    @Test
+    @DisplayName("Deve remover permissão ADMIN mantendo permissão USUARIO")
+    void deveRemoverPermissaoAdminMantendoUsuario() {
+
+        // Arrange
+        Usuario admin = UsuarioFactory.getAdmin();
+
+        // Act
+        admin.atualizarPermissaoAdmin(FALSE);
+
+        // Assert
+        assertFalse(admin.isAdmin());
+        assertEquals(List.of("USUARIO"), admin.obterNomesPermissoes());
     }
 }
