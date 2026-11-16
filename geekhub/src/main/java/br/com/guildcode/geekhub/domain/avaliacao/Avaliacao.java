@@ -57,4 +57,9 @@ public class Avaliacao {
 
     @Column(name = "criado_em", nullable = false)
     private LocalDateTime criadoEm;
+
+    public Boolean pertenceAoAutor(Long usuarioId) {
+
+        return this.autor.getId().equals(usuarioId);
+    }
 }

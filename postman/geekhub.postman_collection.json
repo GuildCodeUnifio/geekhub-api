@@ -4690,6 +4690,894 @@
           ]
         }
       ]
+    },
+    {
+      "name": "avaliacoes",
+      "item": [
+        {
+          "name": "cadastrar",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pedidoId\": 3,\n  \"nota\": 5,\n  \"comentario\": \"Vendedor atencioso e envio rápido!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/avaliacoes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "avaliacoes"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "201 Created (avaliacao cadastrada)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"pedidoId\": 3,\n  \"nota\": 5,\n  \"comentario\": \"Vendedor atencioso e envio rápido!\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/avaliacoes",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "avaliacoes"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 2,\n  \"pedidoId\": 3,\n  \"vendedorId\": 3,\n  \"autorId\": 2,\n  \"autorNome\": \"Usuario GeekHub\",\n  \"nota\": 5,\n  \"comentario\": \"Vendedor atencioso e envio rápido!\",\n  \"criadoEm\": \"2026-11-15T21:30:00.000000\"\n}"
+            },
+            {
+              "name": "400 Bad Request (pedido nao concluido)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"pedidoId\": 1,\n  \"nota\": 5,\n  \"comentario\": \"Tentativa antes da entrega.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/avaliacoes",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "avaliacoes"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"timestamp\": \"2026-11-15T21:30:00.000000\",\n  \"status\": 400,\n  \"erro\": \"Somente pedidos concluídos podem ser avaliados\"\n}"
+            },
+            {
+              "name": "403 Forbidden (usuario nao eh comprador do pedido)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"pedidoId\": 3,\n  \"nota\": 5,\n  \"comentario\": \"Tentativa por terceiro.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/avaliacoes",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "avaliacoes"
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"timestamp\": \"2026-11-15T21:30:00.000000\",\n  \"status\": 403,\n  \"erro\": \"Acesso negado: você não possui permissão para realizar esta operação.\"\n}"
+            },
+            {
+              "name": "404 Not Found (pedido inexistente)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"pedidoId\": 999,\n  \"nota\": 5,\n  \"comentario\": \"Pedido inexistente.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/avaliacoes",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "avaliacoes"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"timestamp\": \"2026-11-15T21:30:00.000000\",\n  \"status\": 404,\n  \"erro\": \"Pedido não encontrado\"\n}"
+            },
+            {
+              "name": "409 Conflict (pedido ja avaliado)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"pedidoId\": 4,\n  \"nota\": 5,\n  \"comentario\": \"Avaliação duplicada.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/avaliacoes",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "avaliacoes"
+                  ]
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"timestamp\": \"2026-11-15T21:30:00.000000\",\n  \"status\": 409,\n  \"erro\": \"Este pedido já foi avaliado\"\n}"
+            },
+            {
+              "name": "401 Unauthorized (token ausente ou invalido)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"pedidoId\": 3,\n  \"nota\": 5,\n  \"comentario\": \"Vendedor atencioso e envio rápido!\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/avaliacoes",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "avaliacoes"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": ""
+            }
+          ]
+        },
+        {
+          "name": "listar",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/avaliacoes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "avaliacoes"
+              ],
+              "query": [
+                {
+                  "key": "vendedorId",
+                  "value": "3",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (todas as avaliacoes)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/avaliacoes",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "avaliacoes"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"content\": [\n    {\n      \"id\": 1,\n      \"pedidoId\": 4,\n      \"vendedorId\": 3,\n      \"autor\": {\n        \"id\": 2,\n        \"nome\": \"Usuario GeekHub\",\n        \"imagemPerfil\": \"https://picsum.photos/200\"\n      },\n      \"nota\": 5,\n      \"comentario\": \"Produto muito bem embalado e entrega rápida!\",\n      \"criadoEm\": \"2026-11-13T18:50:00.000000\"\n    }\n  ],\n  \"totalElements\": 1,\n  \"totalPages\": 1,\n  \"size\": 10,\n  \"number\": 0\n}"
+            },
+            {
+              "name": "200 OK (filtrando por vendedorId)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/avaliacoes?vendedorId=3",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "avaliacoes"
+                  ],
+                  "query": [
+                    {
+                      "key": "vendedorId",
+                      "value": "3"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"content\": [\n    {\n      \"id\": 1,\n      \"pedidoId\": 4,\n      \"vendedorId\": 3,\n      \"autor\": {\n        \"id\": 2,\n        \"nome\": \"Usuario GeekHub\",\n        \"imagemPerfil\": \"https://picsum.photos/200\"\n      },\n      \"nota\": 5,\n      \"comentario\": \"Produto muito bem embalado e entrega rápida!\",\n      \"criadoEm\": \"2026-11-13T18:50:00.000000\"\n    }\n  ],\n  \"totalElements\": 1,\n  \"totalPages\": 1,\n  \"size\": 10,\n  \"number\": 0\n}"
+            },
+            {
+              "name": "200 OK (pagina vazia)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/avaliacoes?page=5",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "avaliacoes"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "5"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"content\": [],\n  \"totalElements\": 1,\n  \"totalPages\": 1,\n  \"size\": 10,\n  \"number\": 5\n}"
+            }
+          ]
+        },
+        {
+          "name": "detalhar",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/avaliacoes/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "avaliacoes",
+                "1"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (avaliacao com comentario)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/avaliacoes/1",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "avaliacoes",
+                    "1"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 1,\n  \"pedidoId\": 4,\n  \"vendedorId\": 3,\n  \"autor\": {\n    \"id\": 2,\n    \"nome\": \"Usuario GeekHub\",\n    \"imagemPerfil\": \"https://picsum.photos/200\"\n  },\n  \"nota\": 5,\n  \"comentario\": \"Produto muito bem embalado e entrega rápida!\",\n  \"criadoEm\": \"2026-11-13T18:50:00.000000\"\n}"
+            },
+            {
+              "name": "200 OK (avaliacao sem comentario)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/avaliacoes/2",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "avaliacoes",
+                    "2"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 2,\n  \"pedidoId\": 3,\n  \"vendedorId\": 3,\n  \"autor\": {\n    \"id\": 2,\n    \"nome\": \"Usuario GeekHub\",\n    \"imagemPerfil\": \"https://picsum.photos/200\"\n  },\n  \"nota\": 5,\n  \"comentario\": null,\n  \"criadoEm\": \"2026-11-15T21:30:00.000000\"\n}"
+            },
+            {
+              "name": "404 Not Found (avaliacao nao encontrada)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/avaliacoes/999",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "avaliacoes",
+                    "999"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"timestamp\": \"2026-11-15T21:30:00.000000\",\n  \"status\": 404,\n  \"erro\": \"Avaliação não encontrada\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "editar",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nota\": 4,\n  \"comentario\": \"Comentário atualizado após revisão.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/avaliacoes/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "avaliacoes",
+                "1"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (avaliacao atualizada)",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nota\": 4,\n  \"comentario\": \"Comentário atualizado após revisão.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/avaliacoes/1",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "avaliacoes",
+                    "1"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 1,\n  \"pedidoId\": 4,\n  \"vendedorId\": 3,\n  \"autorId\": 2,\n  \"autorNome\": \"Usuario GeekHub\",\n  \"nota\": 4,\n  \"comentario\": \"Comentário atualizado após revisão.\",\n  \"criadoEm\": \"2026-11-13T18:50:00.000000\"\n}"
+            },
+            {
+              "name": "400 Bad Request (nota invalida)",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nota\": 6,\n  \"comentario\": \"Nota inválida.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/avaliacoes/1",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "avaliacoes",
+                    "1"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"timestamp\": \"2026-11-15T21:30:00.000000\",\n  \"status\": 400,\n  \"erro\": \"deve ser no máximo 5\",\n  \"detalhes\": [\n    \"nota: deve ser no máximo 5\"\n  ]\n}"
+            },
+            {
+              "name": "403 Forbidden (usuario nao eh autor da avaliacao)",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nota\": 4,\n  \"comentario\": \"Tentativa por outro usuário.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/avaliacoes/1",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "avaliacoes",
+                    "1"
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"timestamp\": \"2026-11-15T21:30:00.000000\",\n  \"status\": 403,\n  \"erro\": \"Acesso negado: você não possui permissão para realizar esta operação.\"\n}"
+            },
+            {
+              "name": "404 Not Found (avaliacao nao encontrada)",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nota\": 4,\n  \"comentario\": \"Avaliação inexistente.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/avaliacoes/999",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "avaliacoes",
+                    "999"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"timestamp\": \"2026-11-15T21:30:00.000000\",\n  \"status\": 404,\n  \"erro\": \"Avaliação não encontrada\"\n}"
+            },
+            {
+              "name": "401 Unauthorized (token ausente ou invalido)",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nota\": 4,\n  \"comentario\": \"Comentário atualizado após revisão.\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/avaliacoes/1",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "avaliacoes",
+                    "1"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": ""
+            }
+          ]
+        },
+        {
+          "name": "remover",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/avaliacoes/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "avaliacoes",
+                "1"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "204 No Content (avaliacao removida)",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/avaliacoes/1",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "avaliacoes",
+                    "1"
+                  ]
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": ""
+            },
+            {
+              "name": "403 Forbidden (usuario sem permissao para remover)",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/avaliacoes/1",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "avaliacoes",
+                    "1"
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"timestamp\": \"2026-11-15T21:30:00.000000\",\n  \"status\": 403,\n  \"erro\": \"Acesso negado: você não possui permissão para realizar esta operação.\"\n}"
+            },
+            {
+              "name": "404 Not Found (avaliacao nao encontrada)",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/avaliacoes/999",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "avaliacoes",
+                    "999"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"timestamp\": \"2026-11-15T21:30:00.000000\",\n  \"status\": 404,\n  \"erro\": \"Avaliação não encontrada\"\n}"
+            },
+            {
+              "name": "401 Unauthorized (token ausente ou invalido)",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/avaliacoes/1",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "avaliacoes",
+                    "1"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": ""
+            }
+          ]
+        }
+      ]
     }
   ],
   "variable": [
