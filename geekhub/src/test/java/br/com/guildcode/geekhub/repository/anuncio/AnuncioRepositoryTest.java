@@ -152,6 +152,62 @@ class AnuncioRepositoryTest {
         assertEquals(0, pagina.getTotalElements());
     }
 
+    @Test
+    @DisplayName("Deve listar e contar apenas anúncios disponíveis com estoque maior que zero do vendedor em ordem decrescente")
+    void deveListarEContarAnunciosDisponiveisComEstoquePorVendedor() {
+
+        // Arrange
+        Categoria categoria = persistirCategoria("Colecionáveis Vendedor");
+        Usuario vendedor = persistirUsuario("Vendedor Alvo", "v4a.anuncio@geekhub.com");
+        Usuario outroVendedor = persistirUsuario("Outro Vendedor", "v4b.anuncio@geekhub.com");
+
+        Anuncio antigo = Anuncio.builder()
+                .nome("Anúncio Antigo")
+                .descricao("Descrição antigo")
+                .preco(BigDecimal.valueOf(120.00))
+                .quantidadeDisponivel(2)
+                .disponivel(TRUE)
+                .condicao(NOVO)
+                .conservacao(EXCELENTE)
+                .categoria(categoria)
+                .vendedor(vendedor)
+                .imagens(List.of("https://picsum.photos/200"))
+                .criadoEm(LocalDateTime.of(2026, 1, 10, 10, 0))
+                .build();
+        Anuncio recente = Anuncio.builder()
+                .nome("Anúncio Recente")
+                .descricao("Descrição recente")
+                .preco(BigDecimal.valueOf(220.00))
+                .quantidadeDisponivel(5)
+                .disponivel(TRUE)
+                .condicao(NOVO)
+                .conservacao(EXCELENTE)
+                .categoria(categoria)
+                .vendedor(vendedor)
+                .imagens(List.of("https://picsum.photos/200"))
+                .criadoEm(LocalDateTime.of(2026, 1, 12, 10, 0))
+                .build();
+        entityManager.persist(antigo);
+        entityManager.persist(recente);
+
+        persistirAnuncio("Indisponível", BigDecimal.valueOf(100.00), 3, FALSE, NOVO, EXCELENTE, categoria, vendedor);
+        persistirAnuncio("Sem Estoque", BigDecimal.valueOf(100.00), 0, TRUE, NOVO, EXCELENTE, categoria, vendedor);
+        persistirAnuncio("Outro Vendedor", BigDecimal.valueOf(100.00), 3, TRUE, NOVO, EXCELENTE, categoria, outroVendedor);
+
+        entityManager.flush();
+        entityManager.clear();
+
+        // Act
+        List<Anuncio> disponiveis = anuncioRepository.listarDisponiveisPorVendedorId(vendedor.getId());
+        Long quantidade = anuncioRepository.contarDisponiveisPorVendedorId(vendedor.getId());
+
+        // Assert
+        assertEquals(2L, quantidade);
+        assertEquals(2, disponiveis.size());
+        assertEquals(recente.getId(), disponiveis.getFirst().getId());
+        assertEquals(antigo.getId(), disponiveis.getLast().getId());
+    }
+
     private Categoria persistirCategoria(String nome) {
 
         Categoria categoria = Categoria.builder()

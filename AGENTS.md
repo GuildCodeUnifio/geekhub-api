@@ -89,7 +89,7 @@ br.com.guildcode.geekhub/
 ### 3.6 Segurança e Autenticação
 - `SecurityConfig` usa JWT assimétrico RSA (`authz.pub` / `authz.pem`) em modo `STATELESS`, `@EnableMethodSecurity` e `BCryptPasswordEncoder`.
 - Claim `scope` no token contém os nomes da entidade `Permissao` (ex: `"USUARIO"`, `"ADMIN"`), que o Spring converte em authorities `SCOPE_USUARIO` e `SCOPE_ADMIN`.
-- Rotas públicas atuais: `POST /login`, `POST /usuarios`, `GET /categorias`, `GET /categorias/**`, `GET /anuncios`, `GET /anuncios/**`, `GET /avaliacoes`, `GET /avaliacoes/**`, `/swagger-ui/**`, `/v3/api-docs/**`. Todas as demais exigem token JWT válido (incluindo `GET /anuncios/meus` e `GET /anuncios/admin`).
+- Rotas públicas atuais: `POST /login`, `POST /usuarios`, `GET /usuarios/*/perfil-vendedor`, `GET /categorias`, `GET /categorias/**`, `GET /anuncios`, `GET /anuncios/**`, `GET /avaliacoes`, `GET /avaliacoes/**`, `/swagger-ui/**`, `/v3/api-docs/**`. Todas as demais exigem token JWT válido (incluindo `GET /anuncios/meus` e `GET /anuncios/admin`).
 
 ---
 

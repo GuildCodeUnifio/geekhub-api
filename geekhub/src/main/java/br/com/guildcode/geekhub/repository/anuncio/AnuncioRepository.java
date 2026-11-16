@@ -9,12 +9,30 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public interface AnuncioRepository extends JpaRepository<Anuncio, Long> {
 
     Boolean existsByCategoriaId(Long categoriaId);
 
     Page<Anuncio> findByVendedorId(Long vendedorId, Pageable pageable);
+
+    @Query("""
+            SELECT a FROM Anuncio a
+            WHERE a.vendedor.id = :vendedorId
+              AND a.disponivel = true
+              AND a.quantidadeDisponivel > 0
+            ORDER BY a.criadoEm DESC
+            """)
+    List<Anuncio> listarDisponiveisPorVendedorId(Long vendedorId);
+
+    @Query("""
+            SELECT COUNT(a) FROM Anuncio a
+            WHERE a.vendedor.id = :vendedorId
+              AND a.disponivel = true
+              AND a.quantidadeDisponivel > 0
+            """)
+    Long contarDisponiveisPorVendedorId(Long vendedorId);
 
     @Query("""
             SELECT a FROM Anuncio a

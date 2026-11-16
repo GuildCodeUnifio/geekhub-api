@@ -50,6 +50,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(POST, "/login").permitAll()
                         .requestMatchers(POST, "/usuarios").permitAll()
+                        .requestMatchers(GET, "/usuarios/*/perfil-vendedor").permitAll()
                         .requestMatchers(GET, "/categorias", "/categorias/**").permitAll()
                         .requestMatchers(GET, "/anuncios/meus", "/anuncios/admin").authenticated()
                         .requestMatchers(GET, "/anuncios", "/anuncios/**").permitAll()

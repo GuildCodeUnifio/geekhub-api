@@ -136,6 +136,33 @@ class PedidoRepositoryTest {
         assertEquals(pedidoConcluido.getId(), vendasConcluidas.getContent().getFirst().getId());
     }
 
+    @Test
+    @DisplayName("Deve contar apenas pedidos distintos do vendedor no estado CONCLUIDO")
+    void deveContarPedidosConcluidosDistintosPorVendedor() {
+
+        // Arrange
+        Usuario vendedorAlvo = persistirUsuario("Vendedor Contagem", "vendedor.cont@email.com");
+        Usuario outroVendedor = persistirUsuario("Outro Vendedor Cont", "vendedor2.cont@email.com");
+        Usuario comprador = persistirUsuario("Comprador Contagem", "comprador.cont@email.com");
+        Categoria categoria = persistirCategoria("Games Contagem");
+
+        Anuncio anuncio1 = persistirAnuncio("Item A", categoria, vendedorAlvo);
+        Anuncio anuncio2 = persistirAnuncio("Item B", categoria, vendedorAlvo);
+        Anuncio anuncioOutro = persistirAnuncio("Item C", categoria, outroVendedor);
+
+        persistirPedidoComItens(comprador, List.of(anuncio1, anuncio2), CONCLUIDO);
+        persistirPedidoComItens(comprador, List.of(anuncio1), CRIADO);
+        persistirPedidoComItens(comprador, List.of(anuncioOutro), CONCLUIDO);
+        entityManager.flush();
+        entityManager.clear();
+
+        // Act
+        Long quantidadeVendas = pedidoRepository.contarPorVendedorIdEEstado(vendedorAlvo.getId(), CONCLUIDO);
+
+        // Assert
+        assertEquals(1L, quantidadeVendas);
+    }
+
     private Usuario persistirUsuario(String nome, String email) {
 
         Usuario usuario = Usuario.builder()

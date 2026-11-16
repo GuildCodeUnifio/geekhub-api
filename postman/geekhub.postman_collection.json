@@ -651,6 +651,113 @@
               "body": "{\n  \"timestamp\": \"2026-11-13T23:10:00.000000\",\n  \"status\": 404,\n  \"erro\": \"Usuário não encontrado\"\n}"
             }
           ]
+        },
+        {
+          "name": "perfil vendedor",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/usuarios/3/perfil-vendedor",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "usuarios",
+                "3",
+                "perfil-vendedor"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (vendedor com avaliacoes, vendas e anuncios)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/usuarios/3/perfil-vendedor",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "usuarios",
+                    "3",
+                    "perfil-vendedor"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 3,\n  \"nome\": \"Vendedor GeekHub\",\n  \"imagemPerfil\": \"https://picsum.photos/200\",\n  \"membroDesde\": \"2026-11-13T18:00:00.000000\",\n  \"notaMedia\": 5.0,\n  \"quantidadeAvaliacoes\": 1,\n  \"quantidadeProdutos\": 3,\n  \"quantidadeVendas\": 2,\n  \"avaliacoes\": [\n    {\n      \"id\": 1,\n      \"pedidoId\": 4,\n      \"autorId\": 2,\n      \"autorNome\": \"Usuario GeekHub\",\n      \"autorImagemPerfil\": \"https://picsum.photos/200\",\n      \"nota\": 5,\n      \"comentario\": \"Produto muito bem embalado e entrega rápida!\",\n      \"criadoEm\": \"2026-11-13T18:50:00.000000\"\n    }\n  ],\n  \"anuncios\": [\n    {\n      \"id\": 3,\n      \"nome\": \"Estátua Kakashi Hatake 18cm\",\n      \"preco\": 329.9,\n      \"imagemPrincipal\": \"https://picsum.photos/200\",\n      \"categoriaId\": 1,\n      \"categoriaNome\": \"Figuras colecionáveis\",\n      \"condicao\": \"USADO\",\n      \"conservacao\": \"BOM\",\n      \"quantidadeDisponivel\": 2,\n      \"criadoEm\": \"2026-11-13T18:12:00.000000\"\n    },\n    {\n      \"id\": 2,\n      \"nome\": \"Mangá Colecionável — Edição Especial\",\n      \"preco\": 49.9,\n      \"imagemPrincipal\": \"https://picsum.photos/200\",\n      \"categoriaId\": 2,\n      \"categoriaNome\": \"Quadrinhos e mangás\",\n      \"condicao\": \"NOVO\",\n      \"conservacao\": \"EXCELENTE\",\n      \"quantidadeDisponivel\": 5,\n      \"criadoEm\": \"2026-11-13T18:11:00.000000\"\n    },\n    {\n      \"id\": 1,\n      \"nome\": \"Action figure Naruto 1ª edição\",\n      \"preco\": 1850.0,\n      \"imagemPrincipal\": \"https://picsum.photos/200\",\n      \"categoriaId\": 1,\n      \"categoriaNome\": \"Figuras colecionáveis\",\n      \"condicao\": \"NOVO\",\n      \"conservacao\": \"EXCELENTE\",\n      \"quantidadeDisponivel\": 3,\n      \"criadoEm\": \"2026-11-13T18:10:00.000000\"\n    }\n  ]\n}"
+            },
+            {
+              "name": "200 OK (vendedor sem avaliacoes ou anuncios)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/usuarios/1/perfil-vendedor",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "usuarios",
+                    "1",
+                    "perfil-vendedor"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 1,\n  \"nome\": \"Administrador GeekHub\",\n  \"imagemPerfil\": \"https://picsum.photos/200\",\n  \"membroDesde\": \"2026-11-13T18:00:00.000000\",\n  \"notaMedia\": null,\n  \"quantidadeAvaliacoes\": 0,\n  \"quantidadeProdutos\": 0,\n  \"quantidadeVendas\": 0,\n  \"avaliacoes\": [],\n  \"anuncios\": []\n}"
+            },
+            {
+              "name": "404 Not Found (vendedor inexistente)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/usuarios/99999/perfil-vendedor",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "usuarios",
+                    "99999",
+                    "perfil-vendedor"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"timestamp\": \"2026-11-15T21:30:00.000000\",\n  \"status\": 404,\n  \"erro\": \"Usuário não encontrado\"\n}"
+            }
+          ]
         }
       ]
     },
