@@ -1,13 +1,16 @@
 package br.com.guildcode.geekhub.controller.usuario;
 
+import br.com.guildcode.geekhub.controller.usuario.dto.request.AtualizarPermissaoUsuarioRequest;
 import br.com.guildcode.geekhub.controller.usuario.dto.request.CadastrarUsuarioRequest;
 import br.com.guildcode.geekhub.controller.usuario.dto.request.EditarUsuarioRequest;
+import br.com.guildcode.geekhub.controller.usuario.dto.response.AtualizarPermissaoUsuarioResponse;
 import br.com.guildcode.geekhub.controller.usuario.dto.response.CadastrarUsuarioResponse;
 import br.com.guildcode.geekhub.controller.usuario.dto.response.DetalharUsuarioResponse;
 import br.com.guildcode.geekhub.controller.usuario.dto.response.EditarUsuarioResponse;
 import br.com.guildcode.geekhub.controller.usuario.dto.response.ListarUsuarioResponse;
 import br.com.guildcode.geekhub.controller.usuario.dto.response.PerfilVendedorResponse;
 import br.com.guildcode.geekhub.openapi.usuario.UsuarioControllerOpenApi;
+import br.com.guildcode.geekhub.service.usuario.AtualizarPermissaoUsuarioService;
 import br.com.guildcode.geekhub.service.usuario.CadastrarUsuarioService;
 import br.com.guildcode.geekhub.service.usuario.DetalharUsuarioService;
 import br.com.guildcode.geekhub.service.usuario.EditarUsuarioService;
@@ -44,6 +47,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
     private final EditarUsuarioService editarUsuarioService;
     private final RemoverUsuarioService removerUsuarioService;
     private final PerfilVendedorService perfilVendedorService;
+    private final AtualizarPermissaoUsuarioService atualizarPermissaoUsuarioService;
 
     public UsuarioController(
             CadastrarUsuarioService cadastrarUsuarioService,
@@ -51,7 +55,8 @@ public class UsuarioController implements UsuarioControllerOpenApi {
             DetalharUsuarioService detalharUsuarioService,
             EditarUsuarioService editarUsuarioService,
             RemoverUsuarioService removerUsuarioService,
-            PerfilVendedorService perfilVendedorService) {
+            PerfilVendedorService perfilVendedorService,
+            AtualizarPermissaoUsuarioService atualizarPermissaoUsuarioService) {
 
         this.cadastrarUsuarioService = cadastrarUsuarioService;
         this.listarUsuariosService = listarUsuariosService;
@@ -59,6 +64,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
         this.editarUsuarioService = editarUsuarioService;
         this.removerUsuarioService = removerUsuarioService;
         this.perfilVendedorService = perfilVendedorService;
+        this.atualizarPermissaoUsuarioService = atualizarPermissaoUsuarioService;
     }
 
     @PostMapping
@@ -103,5 +109,15 @@ public class UsuarioController implements UsuarioControllerOpenApi {
     public PerfilVendedorResponse perfilVendedor(@PathVariable Long id) {
 
         return perfilVendedorService.consultar(id);
+    }
+
+    @PutMapping("/{id}/permissao")
+    @ResponseStatus(OK)
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    public AtualizarPermissaoUsuarioResponse atualizarPermissao(
+            @PathVariable Long id,
+            @Valid @RequestBody AtualizarPermissaoUsuarioRequest request) {
+
+        return atualizarPermissaoUsuarioService.atualizar(id, request);
     }
 }

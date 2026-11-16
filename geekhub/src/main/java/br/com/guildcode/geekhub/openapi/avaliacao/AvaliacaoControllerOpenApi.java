@@ -10,7 +10,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -29,19 +31,21 @@ public interface AvaliacaoControllerOpenApi {
     CadastrarAvaliacaoResponse cadastrar(CadastrarAvaliacaoRequest request);
 
     @Operation(summary = "Listar avaliações paginadas com filtro opcional por vendedor")
+    @SecurityRequirements
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Página de avaliações retornada com sucesso")
     })
     Page<ListarAvaliacaoResponse> listar(
             @Parameter(description = "Filtro opcional pelo ID do vendedor") Long vendedorId,
-            Pageable pageable);
+            @ParameterObject Pageable pageable);
 
     @Operation(summary = "Detalhar avaliação por ID")
+    @SecurityRequirements
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Avaliação encontrada com sucesso"),
             @ApiResponse(responseCode = "404", description = "Avaliação não encontrada")
     })
-    DetalharAvaliacaoResponse detalhar(Long id);
+    DetalharAvaliacaoResponse detalhar(@Parameter(description = "ID da avaliação") Long id);
 
     @Operation(summary = "Editar avaliação existente (apenas autor)")
     @ApiResponses({
@@ -51,7 +55,9 @@ public interface AvaliacaoControllerOpenApi {
             @ApiResponse(responseCode = "403", description = "Apenas o autor pode editar esta avaliação"),
             @ApiResponse(responseCode = "404", description = "Avaliação não encontrada")
     })
-    EditarAvaliacaoResponse editar(Long id, EditarAvaliacaoRequest request);
+    EditarAvaliacaoResponse editar(
+            @Parameter(description = "ID da avaliação") Long id,
+            EditarAvaliacaoRequest request);
 
     @Operation(summary = "Remover avaliação por ID (autor ou ADMIN)")
     @ApiResponses({
@@ -60,5 +66,5 @@ public interface AvaliacaoControllerOpenApi {
             @ApiResponse(responseCode = "403", description = "Usuário sem permissão para remover esta avaliação"),
             @ApiResponse(responseCode = "404", description = "Avaliação não encontrada")
     })
-    void remover(Long id);
+    void remover(@Parameter(description = "ID da avaliação") Long id);
 }

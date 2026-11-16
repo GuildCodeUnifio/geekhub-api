@@ -14,7 +14,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -33,6 +35,7 @@ public interface AnuncioControllerOpenApi {
     CadastrarAnuncioResponse cadastrar(CadastrarAnuncioRequest request);
 
     @Operation(summary = "Listar e pesquisar anúncios no catálogo público")
+    @SecurityRequirements
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Página de anúncios disponíveis retornada com sucesso"),
             @ApiResponse(responseCode = "400", description = "Faixa de preço inválida nos parâmetros de busca")
@@ -45,21 +48,22 @@ public interface AnuncioControllerOpenApi {
             @Parameter(description = "Condição do produto (NOVO ou USADO)") CondicaoProduto condicao,
             @Parameter(description = "Conservação do produto (EXCELENTE, BOM ou REGULAR)") ConservacaoProduto conservacao,
             @Parameter(description = "Identificador do vendedor") Long vendedorId,
-            Pageable pageable);
+            @ParameterObject Pageable pageable);
 
     @Operation(summary = "Detalhar anúncio por ID")
+    @SecurityRequirements
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Detalhes do anúncio retornados com sucesso"),
             @ApiResponse(responseCode = "404", description = "Anúncio não encontrado")
     })
-    DetalharAnuncioResponse detalhar(Long id);
+    DetalharAnuncioResponse detalhar(@Parameter(description = "ID do anúncio") Long id);
 
     @Operation(summary = "Listar anúncios próprios do usuário autenticado")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Página de anúncios do vendedor retornada com sucesso"),
             @ApiResponse(responseCode = "401", description = "Token ausente ou inválido")
     })
-    Page<ListarMeuAnuncioResponse> listarMeus(Pageable pageable);
+    Page<ListarMeuAnuncioResponse> listarMeus(@ParameterObject Pageable pageable);
 
     @Operation(summary = "Listar todos os anúncios da plataforma (ADMIN)")
     @ApiResponses({
@@ -67,7 +71,7 @@ public interface AnuncioControllerOpenApi {
             @ApiResponse(responseCode = "401", description = "Token ausente ou inválido"),
             @ApiResponse(responseCode = "403", description = "Acesso negado")
     })
-    Page<ListarAnuncioAdminResponse> listarAdmin(Pageable pageable);
+    Page<ListarAnuncioAdminResponse> listarAdmin(@ParameterObject Pageable pageable);
 
     @Operation(summary = "Editar anúncio próprio por ID")
     @ApiResponses({
@@ -77,9 +81,11 @@ public interface AnuncioControllerOpenApi {
             @ApiResponse(responseCode = "403", description = "Usuário não é o proprietário do anúncio"),
             @ApiResponse(responseCode = "404", description = "Anúncio ou categoria não encontrado")
     })
-    EditarAnuncioResponse editar(Long id, EditarAnuncioRequest request);
+    EditarAnuncioResponse editar(
+            @Parameter(description = "ID do anúncio") Long id,
+            EditarAnuncioRequest request);
 
-    @Operation(summary = "Remover anúncio por ID")
+    @Operation(summary = "Remover anúncio por ID (proprietário ou ADMIN)")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Anúncio removido com sucesso"),
             @ApiResponse(responseCode = "401", description = "Token ausente ou inválido"),
@@ -87,5 +93,5 @@ public interface AnuncioControllerOpenApi {
             @ApiResponse(responseCode = "404", description = "Anúncio não encontrado"),
             @ApiResponse(responseCode = "409", description = "Anúncio possui pedidos vinculados")
     })
-    void remover(Long id);
+    void remover(@Parameter(description = "ID do anúncio") Long id);
 }

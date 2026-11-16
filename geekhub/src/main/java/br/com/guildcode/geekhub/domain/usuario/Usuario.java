@@ -20,6 +20,8 @@ import java.util.List;
 import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.FetchType.EAGER;
 import static jakarta.persistence.GenerationType.IDENTITY;
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 
 @Entity
 @Builder
@@ -54,7 +56,7 @@ public class Usuario {
     private LocalDateTime criadoEm;
 
     @Builder.Default
-    @OneToMany(mappedBy = "usuario", cascade = ALL, fetch = EAGER)
+    @OneToMany(mappedBy = "usuario", cascade = ALL, orphanRemoval = true, fetch = EAGER)
     private List<Permissao> permissoes = new ArrayList<>();
 
     public void adicionarPermissao(Permissao permissao) {
@@ -67,5 +69,24 @@ public class Usuario {
 
         return this.permissoes.stream()
                 .anyMatch(permissao -> "ADMIN".equals(permissao.getNome()));
+    }
+
+    public void atualizarPermissaoAdmin(Boolean tornarAdmin) {
+
+        if (TRUE.equals(tornarAdmin)) {
+            if (FALSE.equals(isAdmin())) {
+                adicionarPermissao(Permissao.builder().nome("ADMIN").build());
+            }
+            return;
+        }
+
+        this.permissoes.removeIf(permissao -> "ADMIN".equals(permissao.getNome()));
+    }
+
+    public List<String> obterNomesPermissoes() {
+
+        return this.permissoes.stream()
+                .map(Permissao::getNome)
+                .toList();
     }
 }
