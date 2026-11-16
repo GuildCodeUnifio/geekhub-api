@@ -6,6 +6,7 @@ import br.com.guildcode.geekhub.controller.usuario.dto.response.CadastrarUsuario
 import br.com.guildcode.geekhub.controller.usuario.dto.response.DetalharUsuarioResponse;
 import br.com.guildcode.geekhub.controller.usuario.dto.response.EditarUsuarioResponse;
 import br.com.guildcode.geekhub.controller.usuario.dto.response.ListarUsuarioResponse;
+import br.com.guildcode.geekhub.controller.usuario.dto.response.PerfilVendedorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -58,4 +59,11 @@ public interface UsuarioControllerOpenApi {
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
     })
     void remover(Long id);
+
+    @Operation(summary = "Consultar perfil público consolidado e reputação do vendedor")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Perfil do vendedor retornado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+    })
+    PerfilVendedorResponse perfilVendedor(Long id);
 }

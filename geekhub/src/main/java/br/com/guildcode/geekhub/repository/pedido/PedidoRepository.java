@@ -23,4 +23,12 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
               AND (:estado IS NULL OR p.estado = :estado)
             """)
     Page<Pedido> listarVendas(Long vendedorId, EstadoPedido estado, Pageable pageable);
+
+    @Query("""
+            SELECT COUNT(DISTINCT p) FROM Pedido p
+            JOIN p.itens item
+            WHERE item.vendedorId = :vendedorId
+              AND p.estado = :estado
+            """)
+    Long contarPorVendedorIdEEstado(Long vendedorId, EstadoPedido estado);
 }

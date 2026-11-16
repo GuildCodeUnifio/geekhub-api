@@ -6,11 +6,13 @@ import br.com.guildcode.geekhub.controller.usuario.dto.response.CadastrarUsuario
 import br.com.guildcode.geekhub.controller.usuario.dto.response.DetalharUsuarioResponse;
 import br.com.guildcode.geekhub.controller.usuario.dto.response.EditarUsuarioResponse;
 import br.com.guildcode.geekhub.controller.usuario.dto.response.ListarUsuarioResponse;
+import br.com.guildcode.geekhub.controller.usuario.dto.response.PerfilVendedorResponse;
 import br.com.guildcode.geekhub.openapi.usuario.UsuarioControllerOpenApi;
 import br.com.guildcode.geekhub.service.usuario.CadastrarUsuarioService;
 import br.com.guildcode.geekhub.service.usuario.DetalharUsuarioService;
 import br.com.guildcode.geekhub.service.usuario.EditarUsuarioService;
 import br.com.guildcode.geekhub.service.usuario.ListarUsuariosService;
+import br.com.guildcode.geekhub.service.usuario.PerfilVendedorService;
 import br.com.guildcode.geekhub.service.usuario.RemoverUsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -41,19 +43,22 @@ public class UsuarioController implements UsuarioControllerOpenApi {
     private final DetalharUsuarioService detalharUsuarioService;
     private final EditarUsuarioService editarUsuarioService;
     private final RemoverUsuarioService removerUsuarioService;
+    private final PerfilVendedorService perfilVendedorService;
 
     public UsuarioController(
             CadastrarUsuarioService cadastrarUsuarioService,
             ListarUsuariosService listarUsuariosService,
             DetalharUsuarioService detalharUsuarioService,
             EditarUsuarioService editarUsuarioService,
-            RemoverUsuarioService removerUsuarioService) {
+            RemoverUsuarioService removerUsuarioService,
+            PerfilVendedorService perfilVendedorService) {
 
         this.cadastrarUsuarioService = cadastrarUsuarioService;
         this.listarUsuariosService = listarUsuariosService;
         this.detalharUsuarioService = detalharUsuarioService;
         this.editarUsuarioService = editarUsuarioService;
         this.removerUsuarioService = removerUsuarioService;
+        this.perfilVendedorService = perfilVendedorService;
     }
 
     @PostMapping
@@ -91,5 +96,12 @@ public class UsuarioController implements UsuarioControllerOpenApi {
     public void remover(@PathVariable Long id) {
 
         removerUsuarioService.remover(id);
+    }
+
+    @GetMapping("/{id}/perfil-vendedor")
+    @ResponseStatus(OK)
+    public PerfilVendedorResponse perfilVendedor(@PathVariable Long id) {
+
+        return perfilVendedorService.consultar(id);
     }
 }
