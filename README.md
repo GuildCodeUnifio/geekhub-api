@@ -61,6 +61,8 @@ A API inicia em `http://localhost:8080`. Em desenvolvimento, o `FlywayConfig` li
 
 ## Documentação e Coleção Postman
 
+- **Documentação da API (Swagger e endpoints)**: [docs/documentacao-api.md](docs/documentacao-api.md)
+- **Diagrama da Arquitetura em Camadas**: [docs/arquitetura-camadas.svg](docs/arquitetura-camadas.svg)
 - **Diagrama do Banco de Dados (DER)**: [docs/diagrama-db.svg](docs/diagrama-db.svg)
 - **Diagramas de Sequência (Cadastro e Login)**: [docs/diagramas-sequencia-auth.md](docs/diagramas-sequencia-auth.md)
 - **Coleção Postman (com variáveis e respostas salvas)**: [postman/geekhub.postman_collection.json](postman/geekhub.postman_collection.json)
@@ -69,7 +71,7 @@ A API inicia em `http://localhost:8080`. Em desenvolvimento, o `FlywayConfig` li
 
 ## Endpoints Principais
 
-Com a aplicação em execução, consulte todos os endpoints, parâmetros, DTOs, requisitos JWT e códigos de resposta no Swagger:
+Para visualizar a documentação completa (parâmetros, DTOs, autenticação JWT e códigos de resposta), inicie a API e acesse o Swagger (detalhes em [docs/documentacao-api.md](docs/documentacao-api.md)):
 
 - **Swagger UI (interativo)**: `http://localhost:8080/swagger-ui.html`
 - **Contrato OpenAPI JSON**: `http://localhost:8080/v3/api-docs`
