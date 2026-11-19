@@ -100,14 +100,14 @@ Após executar os testes, o relatório completo é gerado localmente em `geekhub
 
 ## Integrantes (Grupo GuildCode)
 
-| Nome Completo | RA |
-| --- | --- |
-| Bryan Alvarenga | `272426` |
-| Igor Bassetto Menon | `274582` |
-| Juan Pedrozo | `273889` |
-| Kauã Gustavo da Fonseca Rodrigues | `273722` |
-| Rafael Dias Garcia | `272207` |
-| Vitor Yago Ferreira dos Santos | `272261` |
+| Nome Completo | RA | GitHub |
+| --- | --- | --- |
+| Bryan Alvarenga | `272426` | [@bryan-coursework](https://github.com/bryan-coursework) |
+| Igor Bassetto Menon | `274582` | [@Igor-menon](https://github.com/Igor-menon) |
+| Juan Pedrozo | `273889` | [@juanpedrozo](https://github.com/juanpedrozo) |
+| Kauã Gustavo da Fonseca Rodrigues | `273722` | [@uaikauaa](https://github.com/uaikauaa) |
+| Rafael Dias Garcia | `272207` | [@diasgarcia](https://github.com/diasgarcia) |
+| Vitor Yago Ferreira dos Santos | `272261` | [@Cuidoka](https://github.com/Cuidoka) |
 
 ---
 
