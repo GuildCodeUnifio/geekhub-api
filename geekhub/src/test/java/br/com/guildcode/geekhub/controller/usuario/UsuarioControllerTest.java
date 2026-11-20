@@ -3,6 +3,7 @@ package br.com.guildcode.geekhub.controller.usuario;
 import br.com.guildcode.geekhub.config.CorsConfig;
 import br.com.guildcode.geekhub.config.SecurityConfig;
 import br.com.guildcode.geekhub.controller.usuario.dto.request.AtualizarPermissaoUsuarioRequest;
+import br.com.guildcode.geekhub.controller.usuario.dto.request.EditarUsuarioRequest;
 import br.com.guildcode.geekhub.controller.usuario.dto.response.AnuncioPerfilVendedorResponse;
 import br.com.guildcode.geekhub.controller.usuario.dto.response.AtualizarPermissaoUsuarioResponse;
 import br.com.guildcode.geekhub.controller.usuario.dto.response.AvaliacaoPerfilVendedorResponse;
@@ -10,6 +11,7 @@ import br.com.guildcode.geekhub.controller.usuario.dto.response.PerfilVendedorRe
 import br.com.guildcode.geekhub.exception.NegocioException;
 import br.com.guildcode.geekhub.exception.RecursoNaoEncontradoException;
 import br.com.guildcode.geekhub.factory.usuario.AtualizarPermissaoUsuarioRequestFactory;
+import br.com.guildcode.geekhub.factory.usuario.EditarUsuarioRequestFactory;
 import br.com.guildcode.geekhub.service.usuario.AtualizarPermissaoUsuarioService;
 import br.com.guildcode.geekhub.service.usuario.CadastrarUsuarioService;
 import br.com.guildcode.geekhub.service.usuario.DetalharUsuarioService;
@@ -23,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.aop.AopAutoConfiguration;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -193,6 +196,54 @@ class UsuarioControllerTest {
                 .andExpect(status().isUnauthorized());
 
         verifyNoInteractions(detalharUsuarioService);
+    }
+
+    @Test
+    @DisplayName("Deve retornar 403 Forbidden ao tentar detalhar outro usuário sem permissão em GET /usuarios/{id}")
+    void deveRetornar403AoDetalharOutroUsuario() throws Exception {
+        // Arrange
+        when(detalharUsuarioService.detalhar(3L))
+                .thenThrow(new AccessDeniedException("Você não possui permissão para visualizar este usuário"));
+
+        // Act & Assert
+        mockMvc.perform(get("/usuarios/3")
+                        .with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_USUARIO"))))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.status").value(403))
+                .andExpect(jsonPath("$.erro").value("Acesso negado: você não possui permissão para realizar esta operação."));
+    }
+
+    @Test
+    @DisplayName("Deve retornar 401 Unauthorized ao tentar editar usuário sem autenticação em PUT /usuarios/{id}")
+    void deveExigirAutenticacaoAoEditarUsuario() throws Exception {
+        // Arrange
+        EditarUsuarioRequest request = EditarUsuarioRequestFactory.get();
+
+        // Act & Assert
+        mockMvc.perform(put("/usuarios/3")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isUnauthorized());
+
+        verifyNoInteractions(editarUsuarioService);
+    }
+
+    @Test
+    @DisplayName("Deve retornar 403 Forbidden ao tentar editar outro usuário sem permissão em PUT /usuarios/{id}")
+    void deveRetornar403AoEditarOutroUsuario() throws Exception {
+        // Arrange
+        EditarUsuarioRequest request = EditarUsuarioRequestFactory.get();
+        when(editarUsuarioService.editar(eq(3L), any(EditarUsuarioRequest.class)))
+                .thenThrow(new AccessDeniedException("Você não possui permissão para editar este usuário"));
+
+        // Act & Assert
+        mockMvc.perform(put("/usuarios/3")
+                        .with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_USUARIO")))
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.status").value(403))
+                .andExpect(jsonPath("$.erro").value("Acesso negado: você não possui permissão para realizar esta operação."));
     }
 
     @Test

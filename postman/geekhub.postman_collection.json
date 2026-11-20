@@ -346,6 +346,34 @@
               "body": ""
             },
             {
+              "name": "403 Forbidden (acesso negado)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/usuarios/2",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "usuarios",
+                    "2"
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"timestamp\": \"2026-11-13T23:10:00.000000\",\n  \"status\": 403,\n  \"erro\": \"Acesso negado: você não possui permissão para realizar esta operação.\"\n}"
+            },
+            {
               "name": "404 Not Found (usuario inexistente)",
               "originalRequest": {
                 "method": "GET",
@@ -499,6 +527,48 @@
               ],
               "cookie": [],
               "body": "{\n  \"timestamp\": \"2026-11-13T23:10:00.000000\",\n  \"status\": 400,\n  \"erro\": \"é obrigatório\",\n  \"detalhes\": [\n    \"nome: é obrigatório\",\n    \"email: deve ser válido\"\n  ]\n}"
+            },
+            {
+              "name": "403 Forbidden (acesso negado)",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nome\": \"Usuário Teste Atualizado\",\n  \"email\": \"teste@geekhub.com\",\n  \"imagemPerfil\": \"https://picsum.photos/200\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/usuarios/2",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "usuarios",
+                    "2"
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"timestamp\": \"2026-11-13T23:10:00.000000\",\n  \"status\": 403,\n  \"erro\": \"Acesso negado: você não possui permissão para realizar esta operação.\"\n}"
             },
             {
               "name": "409 Conflict (email duplicado)",

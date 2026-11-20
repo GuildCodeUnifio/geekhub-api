@@ -38,15 +38,45 @@ class UsuarioAutenticadoServiceTest {
         SecurityContextHolder.clearContext();
     }
 
-    private void configurarContextoDeSeguranca(String email) {
+    private Jwt configurarContextoDeSeguranca() {
 
         Jwt jwt = mock(Jwt.class);
-        when(jwt.getClaim("email")).thenReturn(email);
 
         Authentication authentication = mock(Authentication.class);
         when(authentication.getCredentials()).thenReturn(jwt);
 
         getContext().setAuthentication(authentication);
+        return jwt;
+    }
+
+    @Test
+    @DisplayName("Deve retornar o ID extraído do JWT no contexto de segurança")
+    void deveRetornarIdDoUsuarioAutenticado() {
+
+        // Arrange
+        Jwt jwt = configurarContextoDeSeguranca();
+        when(jwt.getClaim("id")).thenReturn(1L);
+
+        // Act
+        Long id = service.getId();
+
+        // Assert
+        assertEquals(1L, id);
+    }
+
+    @Test
+    @DisplayName("Deve retornar nulo quando o JWT não possuir claim de ID")
+    void deveRetornarNuloQuandoJwtSemClaimId() {
+
+        // Arrange
+        Jwt jwt = configurarContextoDeSeguranca();
+        when(jwt.getClaim("id")).thenReturn(null);
+
+        // Act
+        Long id = service.getId();
+
+        // Assert
+        assertEquals(null, id);
     }
 
     @Test
@@ -54,7 +84,8 @@ class UsuarioAutenticadoServiceTest {
     void deveRetornarEmailDoUsuarioAutenticado() {
 
         // Arrange
-        configurarContextoDeSeguranca("rafael@email.com");
+        Jwt jwt = configurarContextoDeSeguranca();
+        when(jwt.getClaim("email")).thenReturn("rafael@email.com");
 
         // Act
         String email = service.getEmail();
@@ -64,12 +95,32 @@ class UsuarioAutenticadoServiceTest {
     }
 
     @Test
-    @DisplayName("Deve retornar o usuário correspondente ao e-mail do JWT")
-    void deveRetornarUsuarioAutenticado() {
+    @DisplayName("Deve retornar o usuário correspondente ao ID presente no JWT")
+    void deveRetornarUsuarioAutenticadoPorId() {
 
         // Arrange
         Usuario usuario = UsuarioFactory.get();
-        configurarContextoDeSeguranca(usuario.getEmail());
+        Jwt jwt = configurarContextoDeSeguranca();
+        when(jwt.getClaim("id")).thenReturn(usuario.getId());
+        when(usuarioRepository.findById(usuario.getId())).thenReturn(of(usuario));
+
+        // Act
+        Usuario resultado = service.get();
+
+        // Assert
+        assertEquals(usuario.getId(), resultado.getId());
+        assertEquals(usuario.getEmail(), resultado.getEmail());
+    }
+
+    @Test
+    @DisplayName("Deve retornar o usuário correspondente ao e-mail quando JWT não possuir ID")
+    void deveRetornarUsuarioAutenticadoPorEmailQuandoSemId() {
+
+        // Arrange
+        Usuario usuario = UsuarioFactory.get();
+        Jwt jwt = configurarContextoDeSeguranca();
+        when(jwt.getClaim("id")).thenReturn(null);
+        when(jwt.getClaim("email")).thenReturn(usuario.getEmail());
         when(usuarioRepository.findByEmail(usuario.getEmail())).thenReturn(of(usuario));
 
         // Act
@@ -81,11 +132,31 @@ class UsuarioAutenticadoServiceTest {
     }
 
     @Test
-    @DisplayName("Deve lançar RecursoNaoEncontradoException quando usuário do JWT não existe no banco")
+    @DisplayName("Deve lançar RecursoNaoEncontradoException quando ID do JWT não existe no banco")
+    void deveLancarExcecaoQuandoUsuarioPorIdNaoEncontrado() {
+
+        // Arrange
+        Jwt jwt = configurarContextoDeSeguranca();
+        when(jwt.getClaim("id")).thenReturn(999L);
+        when(usuarioRepository.findById(999L)).thenReturn(empty());
+
+        // Act & Assert
+        RecursoNaoEncontradoException ex = assertThrows(
+                RecursoNaoEncontradoException.class,
+                () -> service.get()
+        );
+
+        assertEquals("Usuário não existe ou não está autenticado", ex.getMessage());
+    }
+
+    @Test
+    @DisplayName("Deve lançar RecursoNaoEncontradoException quando usuário sem ID no JWT não existe por e-mail")
     void deveLancarExcecaoQuandoUsuarioNaoEncontrado() {
 
         // Arrange
-        configurarContextoDeSeguranca("naoexiste@email.com");
+        Jwt jwt = configurarContextoDeSeguranca();
+        when(jwt.getClaim("id")).thenReturn(null);
+        when(jwt.getClaim("email")).thenReturn("naoexiste@email.com");
         when(usuarioRepository.findByEmail("naoexiste@email.com")).thenReturn(empty());
 
         // Act & Assert

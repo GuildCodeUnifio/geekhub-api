@@ -9,14 +9,18 @@ import br.com.guildcode.geekhub.service.usuario.BuscarUsuarioService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+
+import java.util.List;
 
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
@@ -24,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -59,8 +64,15 @@ class LoginServiceTest {
         LoginResponse response = service.login(request);
 
         // Assert
+        ArgumentCaptor<JwtEncoderParameters> captor = ArgumentCaptor.forClass(JwtEncoderParameters.class);
+        verify(jwtEncoder).encode(captor.capture());
+        JwtClaimsSet claims = captor.getValue().getClaims();
+
         assertEquals("jwt-token-gerado", response.accessToken());
         assertEquals(3600L, response.expiresIn());
+        assertEquals(usuario.getId(), claims.getClaim("id"));
+        assertEquals(usuario.getEmail(), claims.getClaim("email"));
+        assertEquals(List.of("USUARIO"), claims.getClaim("scope"));
     }
 
     @Test
