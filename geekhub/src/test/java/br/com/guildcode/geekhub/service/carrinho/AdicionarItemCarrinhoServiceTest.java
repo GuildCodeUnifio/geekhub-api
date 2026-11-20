@@ -5,6 +5,7 @@ import br.com.guildcode.geekhub.controller.carrinho.dto.response.AdicionarItemCa
 import br.com.guildcode.geekhub.domain.anuncio.Anuncio;
 import br.com.guildcode.geekhub.domain.carrinho.ItemCarrinho;
 import br.com.guildcode.geekhub.domain.usuario.Usuario;
+import br.com.guildcode.geekhub.exception.ConflitoException;
 import br.com.guildcode.geekhub.exception.NegocioException;
 import br.com.guildcode.geekhub.exception.RecursoNaoEncontradoException;
 import br.com.guildcode.geekhub.factory.anuncio.AnuncioFactory;
@@ -16,6 +17,7 @@ import br.com.guildcode.geekhub.repository.carrinho.ItemCarrinhoRepository;
 import br.com.guildcode.geekhub.service.anuncio.BuscarAnuncioService;
 import br.com.guildcode.geekhub.service.auth.UsuarioAutenticadoService;
 import br.com.guildcode.geekhub.service.carrinho.validator.ValidarDisponibilidadeItemValidatorService;
+import br.com.guildcode.geekhub.service.carrinho.validator.VendedorUnicoCarrinhoValidatorService;
 import br.com.guildcode.geekhub.validator.carrinho.AdicionarItemCarrinhoValidator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -52,6 +54,9 @@ class AdicionarItemCarrinhoServiceTest {
 
     @Mock
     private ItemCarrinhoRepository itemCarrinhoRepository;
+
+    @Mock
+    private VendedorUnicoCarrinhoValidatorService vendedorUnicoCarrinhoValidatorService;
 
     @Mock
     private ValidarDisponibilidadeItemValidatorService validarDisponibilidadeItemValidatorService;
@@ -94,6 +99,7 @@ class AdicionarItemCarrinhoServiceTest {
         // Assert
         assertEquals(responseEsperada, resultado);
         verify(adicionarItemCarrinhoValidator).validarDadosAdicao(request);
+        verify(vendedorUnicoCarrinhoValidatorService).validar(comprador, anuncio);
         verify(validarDisponibilidadeItemValidatorService).validar(anuncio, comprador, 2);
         verify(itemCarrinhoRepository).save(item);
     }
@@ -130,9 +136,31 @@ class AdicionarItemCarrinhoServiceTest {
         // Assert
         assertEquals(responseEsperada, resultado);
         assertEquals(3, itemExistente.getQuantidade());
+        verify(vendedorUnicoCarrinhoValidatorService).validar(comprador, anuncio);
         verify(validarDisponibilidadeItemValidatorService).validar(anuncio, comprador, 3);
         verify(adicionarItemCarrinhoMapper, never()).toEntity(any(), any(), any(), any());
         verify(itemCarrinhoRepository).save(itemExistente);
+    }
+
+    @Test
+    @DisplayName("Deve lançar ConflitoException quando carrinho já possuir item de outro vendedor")
+    void deveLancarConflitoQuandoCarrinhoPossuirOutroVendedor() {
+        // Arrange
+        AdicionarItemCarrinhoRequest request = AdicionarItemCarrinhoRequestFactory.get();
+        Usuario comprador = UsuarioFactory.get();
+        Anuncio anuncio = AnuncioFactory.get();
+
+        when(usuarioAutenticadoService.get()).thenReturn(comprador);
+        when(buscarAnuncioService.buscarPorId(1L)).thenReturn(anuncio);
+        doThrow(new ConflitoException(
+                "O carrinho já possui itens de outro vendedor. Finalize ou esvazie o carrinho antes de adicionar produtos de um vendedor diferente"))
+                .when(vendedorUnicoCarrinhoValidatorService)
+                .validar(comprador, anuncio);
+
+        // Act & Assert
+        assertThrows(ConflitoException.class, () -> service.adicionar(request));
+        verifyNoInteractions(itemCarrinhoRepository, validarDisponibilidadeItemValidatorService,
+                adicionarItemCarrinhoMapper);
     }
 
     @Test
@@ -171,7 +199,7 @@ class AdicionarItemCarrinhoServiceTest {
 
         // Act & Assert
         assertThrows(RecursoNaoEncontradoException.class, () -> service.adicionar(request));
-        verifyNoInteractions(itemCarrinhoRepository, validarDisponibilidadeItemValidatorService,
-                adicionarItemCarrinhoMapper);
+        verifyNoInteractions(vendedorUnicoCarrinhoValidatorService, itemCarrinhoRepository,
+                validarDisponibilidadeItemValidatorService, adicionarItemCarrinhoMapper);
     }
 }

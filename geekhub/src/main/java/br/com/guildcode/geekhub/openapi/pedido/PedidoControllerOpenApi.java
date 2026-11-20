@@ -25,7 +25,7 @@ public interface PedidoControllerOpenApi {
             @ApiResponse(responseCode = "201", description = "Pedido criado e estoque descontado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Carrinho de compras vazio"),
             @ApiResponse(responseCode = "401", description = "Token ausente ou inválido"),
-            @ApiResponse(responseCode = "409", description = "Anúncio indisponível ou estoque insuficiente")
+            @ApiResponse(responseCode = "409", description = "Anúncio indisponível, estoque insuficiente ou itens de vendedores diferentes")
     })
     CriarPedidoResponse criar();
 

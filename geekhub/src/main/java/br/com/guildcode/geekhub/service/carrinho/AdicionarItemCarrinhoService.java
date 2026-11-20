@@ -10,6 +10,7 @@ import br.com.guildcode.geekhub.repository.carrinho.ItemCarrinhoRepository;
 import br.com.guildcode.geekhub.service.anuncio.BuscarAnuncioService;
 import br.com.guildcode.geekhub.service.auth.UsuarioAutenticadoService;
 import br.com.guildcode.geekhub.service.carrinho.validator.ValidarDisponibilidadeItemValidatorService;
+import br.com.guildcode.geekhub.service.carrinho.validator.VendedorUnicoCarrinhoValidatorService;
 import br.com.guildcode.geekhub.validator.carrinho.AdicionarItemCarrinhoValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +25,7 @@ public class AdicionarItemCarrinhoService {
     private final UsuarioAutenticadoService usuarioAutenticadoService;
     private final BuscarAnuncioService buscarAnuncioService;
     private final ItemCarrinhoRepository itemCarrinhoRepository;
+    private final VendedorUnicoCarrinhoValidatorService vendedorUnicoCarrinhoValidatorService;
     private final ValidarDisponibilidadeItemValidatorService validarDisponibilidadeItemValidatorService;
     private final AdicionarItemCarrinhoMapper adicionarItemCarrinhoMapper;
 
@@ -32,6 +34,7 @@ public class AdicionarItemCarrinhoService {
             UsuarioAutenticadoService usuarioAutenticadoService,
             BuscarAnuncioService buscarAnuncioService,
             ItemCarrinhoRepository itemCarrinhoRepository,
+            VendedorUnicoCarrinhoValidatorService vendedorUnicoCarrinhoValidatorService,
             ValidarDisponibilidadeItemValidatorService validarDisponibilidadeItemValidatorService,
             AdicionarItemCarrinhoMapper adicionarItemCarrinhoMapper) {
 
@@ -39,6 +42,7 @@ public class AdicionarItemCarrinhoService {
         this.usuarioAutenticadoService = usuarioAutenticadoService;
         this.buscarAnuncioService = buscarAnuncioService;
         this.itemCarrinhoRepository = itemCarrinhoRepository;
+        this.vendedorUnicoCarrinhoValidatorService = vendedorUnicoCarrinhoValidatorService;
         this.validarDisponibilidadeItemValidatorService = validarDisponibilidadeItemValidatorService;
         this.adicionarItemCarrinhoMapper = adicionarItemCarrinhoMapper;
     }
@@ -50,6 +54,8 @@ public class AdicionarItemCarrinhoService {
 
         Usuario comprador = usuarioAutenticadoService.get();
         Anuncio anuncio = buscarAnuncioService.buscarPorId(request.anuncioId());
+
+        vendedorUnicoCarrinhoValidatorService.validar(comprador, anuncio);
 
         Optional<ItemCarrinho> itemExistente =
                 itemCarrinhoRepository.findByCompradorIdAndAnuncioId(comprador.getId(), anuncio.getId());

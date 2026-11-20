@@ -179,6 +179,22 @@ class PedidoControllerTest {
     }
 
     @Test
+    @DisplayName("Deve retornar 409 Conflict quando carrinho possuir itens de vendedores diferentes")
+    void deveRetornar409QuandoHouverItensDeVendedoresDiferentes() throws Exception {
+        // Arrange
+        when(criarPedidoService.criar())
+                .thenThrow(new ConflitoException("Todos os itens do pedido devem pertencer ao mesmo vendedor"));
+
+        // Act & Assert
+        mockMvc.perform(post("/pedidos")
+                        .with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_USUARIO"))))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.status").value(409))
+                .andExpect(jsonPath("$.erro")
+                        .value("Todos os itens do pedido devem pertencer ao mesmo vendedor"));
+    }
+
+    @Test
     @DisplayName("Deve retornar 401 ao listar compras sem autenticação")
     void deveRetornar401AoListarComprasSemAutenticacao() throws Exception {
         // Act & Assert

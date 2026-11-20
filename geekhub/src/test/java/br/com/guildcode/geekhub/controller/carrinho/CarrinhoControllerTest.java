@@ -10,6 +10,7 @@ import br.com.guildcode.geekhub.controller.carrinho.dto.response.DetalharItemCar
 import br.com.guildcode.geekhub.controller.carrinho.dto.response.EditarItemCarrinhoResponse;
 import br.com.guildcode.geekhub.controller.carrinho.dto.response.ItemCarrinhoDetalheResponse;
 import br.com.guildcode.geekhub.controller.carrinho.dto.response.ListarItemCarrinhoResponse;
+import br.com.guildcode.geekhub.exception.ConflitoException;
 import br.com.guildcode.geekhub.exception.NegocioException;
 import br.com.guildcode.geekhub.exception.RecursoNaoEncontradoException;
 import br.com.guildcode.geekhub.factory.carrinho.AdicionarItemCarrinhoRequestFactory;
@@ -171,6 +172,25 @@ class CarrinhoControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
                 .andExpect(jsonPath("$.erro").value("Quantidade solicitada excede o estoque disponível do anúncio"));
+    }
+
+    @Test
+    @DisplayName("Deve retornar 409 ao tentar adicionar item de outro vendedor ao carrinho")
+    void deveRetornar409QuandoCarrinhoPossuirItemDeOutroVendedor() throws Exception {
+        // Arrange
+        AdicionarItemCarrinhoRequest request = AdicionarItemCarrinhoRequestFactory.get();
+        String msgErro = "O carrinho já possui itens de outro vendedor. Finalize ou esvazie o carrinho antes de adicionar produtos de um vendedor diferente";
+        when(adicionarItemCarrinhoService.adicionar(any(AdicionarItemCarrinhoRequest.class)))
+                .thenThrow(new ConflitoException(msgErro));
+
+        // Act & Assert
+        mockMvc.perform(post("/carrinho/itens")
+                        .with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_USUARIO")))
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.status").value(409))
+                .andExpect(jsonPath("$.erro").value(msgErro));
     }
 
     @Test

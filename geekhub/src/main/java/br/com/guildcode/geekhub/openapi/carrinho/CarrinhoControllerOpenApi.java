@@ -24,7 +24,8 @@ public interface CarrinhoControllerOpenApi {
             @ApiResponse(responseCode = "201", description = "Item adicionado ou incrementado no carrinho com sucesso"),
             @ApiResponse(responseCode = "400", description = "Anúncio indisponível, próprio ou quantidade acima do estoque"),
             @ApiResponse(responseCode = "401", description = "Token ausente ou inválido"),
-            @ApiResponse(responseCode = "404", description = "Anúncio não encontrado")
+            @ApiResponse(responseCode = "404", description = "Anúncio não encontrado"),
+            @ApiResponse(responseCode = "409", description = "Carrinho já possui itens de outro vendedor")
     })
     AdicionarItemCarrinhoResponse adicionarItem(AdicionarItemCarrinhoRequest request);
 
