@@ -12,6 +12,8 @@ public interface ItemCarrinhoRepository extends JpaRepository<ItemCarrinho, Long
 
     Optional<ItemCarrinho> findByCompradorIdAndAnuncioId(Long compradorId, Long anuncioId);
 
+    Boolean existsByCompradorIdAndAnuncioVendedorIdNot(Long compradorId, Long vendedorId);
+
     List<ItemCarrinho> findByCompradorIdOrderByCriadoEmDesc(Long compradorId);
 
     Page<ItemCarrinho> findByCompradorId(Long compradorId, Pageable pageable);

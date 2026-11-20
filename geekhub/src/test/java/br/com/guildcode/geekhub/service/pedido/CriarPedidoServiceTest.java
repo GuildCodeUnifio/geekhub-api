@@ -19,6 +19,7 @@ import br.com.guildcode.geekhub.repository.pedido.PedidoRepository;
 import br.com.guildcode.geekhub.service.auth.UsuarioAutenticadoService;
 import br.com.guildcode.geekhub.service.pedido.validator.CarrinhoNaoVazioValidatorService;
 import br.com.guildcode.geekhub.service.pedido.validator.EstoqueDisponivelPedidoValidatorService;
+import br.com.guildcode.geekhub.service.pedido.validator.VendedorUnicoPedidoValidatorService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -55,6 +56,9 @@ class CriarPedidoServiceTest {
 
     @Mock
     private CarrinhoNaoVazioValidatorService carrinhoNaoVazioValidatorService;
+
+    @Mock
+    private VendedorUnicoPedidoValidatorService vendedorUnicoPedidoValidatorService;
 
     @Mock
     private EstoqueDisponivelPedidoValidatorService estoqueDisponivelPedidoValidatorService;
@@ -149,6 +153,7 @@ class CriarPedidoServiceTest {
         assertEquals(0, anuncio.getQuantidadeDisponivel());
         assertEquals(FALSE, anuncio.getDisponivel());
         verify(carrinhoNaoVazioValidatorService).validar(itensCarrinho);
+        verify(vendedorUnicoPedidoValidatorService).validar(itensCarrinho);
         verify(estoqueDisponivelPedidoValidatorService).validar(itensCarrinho);
         verify(anuncioRepository).save(anuncio);
         verify(pedidoRepository).save(pedido);
@@ -171,6 +176,28 @@ class CriarPedidoServiceTest {
 
         // Act & Assert
         assertThrows(NegocioException.class, () -> service.criar());
+        verifyNoInteractions(vendedorUnicoPedidoValidatorService, estoqueDisponivelPedidoValidatorService,
+                anuncioRepository, pedidoRepository, criarPedidoMapper);
+        verify(itemCarrinhoRepository, never()).deleteByCompradorId(any());
+    }
+
+    @Test
+    @DisplayName("Deve impedir criação de pedido quando houver itens de vendedores diferentes")
+    void deveImpedirCriacaoQuandoHouverItensDeVendedoresDiferentes() {
+        // Arrange
+        Usuario comprador = UsuarioFactory.get();
+        ItemCarrinho itemCarrinho = ItemCarrinhoFactory.get();
+        List<ItemCarrinho> itensCarrinho = List.of(itemCarrinho);
+
+        when(usuarioAutenticadoService.get()).thenReturn(comprador);
+        when(itemCarrinhoRepository.findByCompradorIdOrderByCriadoEmDesc(comprador.getId()))
+                .thenReturn(itensCarrinho);
+        doThrow(new ConflitoException("Todos os itens do pedido devem pertencer ao mesmo vendedor"))
+                .when(vendedorUnicoPedidoValidatorService)
+                .validar(itensCarrinho);
+
+        // Act & Assert
+        assertThrows(ConflitoException.class, () -> service.criar());
         verifyNoInteractions(estoqueDisponivelPedidoValidatorService, anuncioRepository,
                 pedidoRepository, criarPedidoMapper);
         verify(itemCarrinhoRepository, never()).deleteByCompradorId(any());

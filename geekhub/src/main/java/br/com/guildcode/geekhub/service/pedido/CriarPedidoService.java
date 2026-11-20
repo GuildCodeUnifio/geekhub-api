@@ -13,6 +13,7 @@ import br.com.guildcode.geekhub.repository.pedido.PedidoRepository;
 import br.com.guildcode.geekhub.service.auth.UsuarioAutenticadoService;
 import br.com.guildcode.geekhub.service.pedido.validator.CarrinhoNaoVazioValidatorService;
 import br.com.guildcode.geekhub.service.pedido.validator.EstoqueDisponivelPedidoValidatorService;
+import br.com.guildcode.geekhub.service.pedido.validator.VendedorUnicoPedidoValidatorService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +28,7 @@ public class CriarPedidoService {
     private final UsuarioAutenticadoService usuarioAutenticadoService;
     private final ItemCarrinhoRepository itemCarrinhoRepository;
     private final CarrinhoNaoVazioValidatorService carrinhoNaoVazioValidatorService;
+    private final VendedorUnicoPedidoValidatorService vendedorUnicoPedidoValidatorService;
     private final EstoqueDisponivelPedidoValidatorService estoqueDisponivelPedidoValidatorService;
     private final AnuncioRepository anuncioRepository;
     private final PedidoRepository pedidoRepository;
@@ -36,6 +38,7 @@ public class CriarPedidoService {
             UsuarioAutenticadoService usuarioAutenticadoService,
             ItemCarrinhoRepository itemCarrinhoRepository,
             CarrinhoNaoVazioValidatorService carrinhoNaoVazioValidatorService,
+            VendedorUnicoPedidoValidatorService vendedorUnicoPedidoValidatorService,
             EstoqueDisponivelPedidoValidatorService estoqueDisponivelPedidoValidatorService,
             AnuncioRepository anuncioRepository,
             PedidoRepository pedidoRepository,
@@ -44,6 +47,7 @@ public class CriarPedidoService {
         this.usuarioAutenticadoService = usuarioAutenticadoService;
         this.itemCarrinhoRepository = itemCarrinhoRepository;
         this.carrinhoNaoVazioValidatorService = carrinhoNaoVazioValidatorService;
+        this.vendedorUnicoPedidoValidatorService = vendedorUnicoPedidoValidatorService;
         this.estoqueDisponivelPedidoValidatorService = estoqueDisponivelPedidoValidatorService;
         this.anuncioRepository = anuncioRepository;
         this.pedidoRepository = pedidoRepository;
@@ -58,6 +62,7 @@ public class CriarPedidoService {
                 itemCarrinhoRepository.findByCompradorIdOrderByCriadoEmDesc(comprador.getId());
 
         carrinhoNaoVazioValidatorService.validar(itensCarrinho);
+        vendedorUnicoPedidoValidatorService.validar(itensCarrinho);
         estoqueDisponivelPedidoValidatorService.validar(itensCarrinho);
 
         LocalDateTime agora = LocalDateTime.now();
