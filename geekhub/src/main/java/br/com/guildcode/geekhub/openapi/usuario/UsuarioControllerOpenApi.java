@@ -43,6 +43,7 @@ public interface UsuarioControllerOpenApi {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Usuário encontrado com sucesso"),
             @ApiResponse(responseCode = "401", description = "Token ausente ou inválido"),
+            @ApiResponse(responseCode = "403", description = "Acesso negado"),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
     })
     DetalharUsuarioResponse detalhar(@Parameter(description = "ID do usuário") Long id);
@@ -52,6 +53,7 @@ public interface UsuarioControllerOpenApi {
             @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos na requisição"),
             @ApiResponse(responseCode = "401", description = "Token ausente ou inválido"),
+            @ApiResponse(responseCode = "403", description = "Acesso negado"),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
             @ApiResponse(responseCode = "409", description = "E-mail já cadastrado")
     })

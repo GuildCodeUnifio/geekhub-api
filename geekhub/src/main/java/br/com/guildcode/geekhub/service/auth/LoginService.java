@@ -55,6 +55,7 @@ public class LoginService {
                 .subject(usuario.getNome())
                 .issuedAt(Instant.now())
                 .expiresAt(Instant.now().plusSeconds(expiresIn))
+                .claim("id", usuario.getId())
                 .claim("email", usuario.getEmail())
                 .claim("scope", permissoes)
                 .build();

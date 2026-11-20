@@ -8,6 +8,8 @@ import br.com.guildcode.geekhub.factory.usuario.EditarUsuarioRequestFactory;
 import br.com.guildcode.geekhub.factory.usuario.UsuarioFactory;
 import br.com.guildcode.geekhub.mapper.usuario.EditarUsuarioMapper;
 import br.com.guildcode.geekhub.repository.usuario.UsuarioRepository;
+import br.com.guildcode.geekhub.service.auth.UsuarioAutenticadoService;
+import br.com.guildcode.geekhub.service.usuario.validator.AcessoUsuarioValidatorService;
 import br.com.guildcode.geekhub.service.usuario.validator.EmailUnicoValidatorService;
 import br.com.guildcode.geekhub.validator.usuario.EditarUsuarioValidator;
 import org.junit.jupiter.api.DisplayName;
@@ -16,6 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.access.AccessDeniedException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -23,6 +26,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,6 +37,12 @@ class EditarUsuarioServiceTest {
 
     @Mock
     private EditarUsuarioValidator editarUsuarioValidator;
+
+    @Mock
+    private UsuarioAutenticadoService usuarioAutenticadoService;
+
+    @Mock
+    private AcessoUsuarioValidatorService acessoUsuarioValidatorService;
 
     @Mock
     private BuscarUsuarioService buscarUsuarioService;
@@ -63,6 +73,8 @@ class EditarUsuarioServiceTest {
                 .build();
 
         doNothing().when(editarUsuarioValidator).validarDadosEdicao(request);
+        when(usuarioAutenticadoService.get()).thenReturn(usuario);
+        doNothing().when(acessoUsuarioValidatorService).validarEdicao(usuario.getId(), usuario);
         when(buscarUsuarioService.buscarPorId(usuario.getId())).thenReturn(usuario);
         when(editarUsuarioMapper.toResponse(usuario)).thenReturn(expectedResponse);
 
@@ -76,6 +88,7 @@ class EditarUsuarioServiceTest {
         assertEquals(expectedResponse.nome(), response.nome());
 
         verify(editarUsuarioValidator).validarDadosEdicao(request);
+        verify(acessoUsuarioValidatorService).validarEdicao(usuario.getId(), usuario);
         verify(emailUnicoValidatorService, never()).validar(request.email());
         verify(usuarioRepository).save(usuario);
         verify(editarUsuarioMapper).toResponse(usuario);
@@ -98,6 +111,8 @@ class EditarUsuarioServiceTest {
                 .build();
 
         doNothing().when(editarUsuarioValidator).validarDadosEdicao(request);
+        when(usuarioAutenticadoService.get()).thenReturn(usuario);
+        doNothing().when(acessoUsuarioValidatorService).validarEdicao(usuario.getId(), usuario);
         when(buscarUsuarioService.buscarPorId(usuario.getId())).thenReturn(usuario);
         doNothing().when(emailUnicoValidatorService).validar(request.email());
         when(editarUsuarioMapper.toResponse(usuario)).thenReturn(expectedResponse);
@@ -110,6 +125,7 @@ class EditarUsuarioServiceTest {
         assertEquals(expectedResponse.email(), response.email());
 
         verify(editarUsuarioValidator).validarDadosEdicao(request);
+        verify(acessoUsuarioValidatorService).validarEdicao(usuario.getId(), usuario);
         verify(emailUnicoValidatorService).validar(request.email());
         verify(usuarioRepository).save(usuario);
         verify(editarUsuarioMapper).toResponse(usuario);
@@ -124,6 +140,8 @@ class EditarUsuarioServiceTest {
         EditarUsuarioRequest request = EditarUsuarioRequestFactory.comNovoEmail();
 
         doNothing().when(editarUsuarioValidator).validarDadosEdicao(request);
+        when(usuarioAutenticadoService.get()).thenReturn(usuario);
+        doNothing().when(acessoUsuarioValidatorService).validarEdicao(usuario.getId(), usuario);
         when(buscarUsuarioService.buscarPorId(usuario.getId())).thenReturn(usuario);
         doThrow(new ConflitoException("E-mail já cadastrado"))
                 .when(emailUnicoValidatorService).validar(request.email());
@@ -137,5 +155,28 @@ class EditarUsuarioServiceTest {
         assertEquals("E-mail já cadastrado", ex.getMessage());
         verify(editarUsuarioValidator).validarDadosEdicao(request);
         verify(usuarioRepository, never()).save(usuario);
+    }
+
+    @Test
+    @DisplayName("Deve lançar AccessDeniedException ao editar usuário sem permissão de acesso")
+    void deveLancarAccessDeniedQuandoSemPermissao() {
+
+        // Arrange
+        Usuario usuarioAutenticado = UsuarioFactory.get();
+        EditarUsuarioRequest request = EditarUsuarioRequestFactory.get();
+
+        doNothing().when(editarUsuarioValidator).validarDadosEdicao(request);
+        when(usuarioAutenticadoService.get()).thenReturn(usuarioAutenticado);
+        doThrow(new AccessDeniedException("Você não possui permissão para editar este usuário"))
+                .when(acessoUsuarioValidatorService).validarEdicao(2L, usuarioAutenticado);
+
+        // Act & Assert
+        AccessDeniedException ex = assertThrows(
+                AccessDeniedException.class,
+                () -> service.editar(2L, request)
+        );
+
+        assertEquals("Você não possui permissão para editar este usuário", ex.getMessage());
+        verifyNoInteractions(buscarUsuarioService, emailUnicoValidatorService, usuarioRepository, editarUsuarioMapper);
     }
 }

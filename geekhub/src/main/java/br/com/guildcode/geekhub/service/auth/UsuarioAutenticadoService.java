@@ -7,6 +7,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 import static org.springframework.security.core.context.SecurityContextHolder.getContext;
 
 @Service
@@ -19,17 +21,30 @@ public class UsuarioAutenticadoService {
         this.usuarioRepository = usuarioRepository;
     }
 
+    public Long getId() {
+
+        Number id = getJwt().getClaim("id");
+        return id != null ? Long.valueOf(id.longValue()) : null;
+    }
+
     public String getEmail() {
 
-        Authentication authentication = getContext().getAuthentication();
-        Jwt jwt = (Jwt) authentication.getCredentials();
-
-        return jwt.getClaim("email");
+        return getJwt().getClaim("email");
     }
 
     public Usuario get() {
 
-        return usuarioRepository.findByEmail(getEmail())
-                .orElseThrow(() -> new RecursoNaoEncontradoException("Usuário não existe ou não está autenticado"));
+        Long id = getId();
+        Optional<Usuario> usuario = id != null
+                ? usuarioRepository.findById(id)
+                : usuarioRepository.findByEmail(getEmail());
+
+        return usuario.orElseThrow(() -> new RecursoNaoEncontradoException("Usuário não existe ou não está autenticado"));
+    }
+
+    private Jwt getJwt() {
+
+        Authentication authentication = getContext().getAuthentication();
+        return (Jwt) authentication.getCredentials();
     }
 }
