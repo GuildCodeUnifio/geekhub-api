@@ -23,12 +23,14 @@ import java.util.List;
 
 import static br.com.guildcode.geekhub.domain.anuncio.enums.CondicaoProduto.NOVO;
 import static br.com.guildcode.geekhub.domain.anuncio.enums.ConservacaoProduto.EXCELENTE;
+import static br.com.guildcode.geekhub.domain.pedido.enums.EstadoPedido.CANCELADO;
 import static br.com.guildcode.geekhub.domain.pedido.enums.EstadoPedido.CONCLUIDO;
 import static br.com.guildcode.geekhub.domain.pedido.enums.EstadoPedido.CRIADO;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import static org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase.Replace.NONE;
@@ -161,6 +163,50 @@ class PedidoRepositoryTest {
 
         // Assert
         assertEquals(1L, quantidadeVendas);
+    }
+
+    @Test
+    @DisplayName("Deve somar valor total dos pedidos excluindo o estado informado")
+    void deveSomarValorTotalExcluindoEstadoCancelado() {
+
+        // Arrange
+        Usuario vendedor = persistirUsuario("Vendedor Soma", "vendedor.soma@email.com");
+        Usuario comprador = persistirUsuario("Comprador Soma", "comprador.soma@email.com");
+        Categoria categoria = persistirCategoria("Soma Dashboard");
+        Anuncio anuncio = persistirAnuncio("Item Soma", categoria, vendedor);
+
+        persistirPedidoComItens(comprador, List.of(anuncio), CRIADO);
+        persistirPedidoComItens(comprador, List.of(anuncio), CONCLUIDO);
+        persistirPedidoComItens(comprador, List.of(anuncio), CANCELADO);
+        entityManager.flush();
+        entityManager.clear();
+
+        // Act
+        BigDecimal receitaValida = pedidoRepository.somarValorTotalExcluindoEstado(CANCELADO);
+
+        // Assert
+        assertEquals(0, new BigDecimal("399.80").compareTo(receitaValida));
+    }
+
+    @Test
+    @DisplayName("Deve retornar nulo ao somar valor total quando só existirem pedidos cancelados")
+    void deveRetornarNuloQuandoSoExistiremPedidosCancelados() {
+
+        // Arrange
+        Usuario vendedor = persistirUsuario("Vendedor Canc", "vendedor.canc@email.com");
+        Usuario comprador = persistirUsuario("Comprador Canc", "comprador.canc@email.com");
+        Categoria categoria = persistirCategoria("Canc Dashboard");
+        Anuncio anuncio = persistirAnuncio("Item Canc", categoria, vendedor);
+
+        persistirPedidoComItens(comprador, List.of(anuncio), CANCELADO);
+        entityManager.flush();
+        entityManager.clear();
+
+        // Act
+        BigDecimal receitaValida = pedidoRepository.somarValorTotalExcluindoEstado(CANCELADO);
+
+        // Assert
+        assertNull(receitaValida);
     }
 
     private Usuario persistirUsuario(String nome, String email) {
