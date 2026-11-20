@@ -27,6 +27,7 @@ import static br.com.guildcode.geekhub.domain.anuncio.enums.ConservacaoProduto.R
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase.Replace.NONE;
 
@@ -206,6 +207,55 @@ class AnuncioRepositoryTest {
         assertEquals(2, disponiveis.size());
         assertEquals(recente.getId(), disponiveis.getFirst().getId());
         assertEquals(antigo.getId(), disponiveis.getLast().getId());
+    }
+
+    @Test
+    @DisplayName("Deve contar disponíveis, somar estoque e agrupar anúncios por categoria para o dashboard")
+    void deveAgregarDisponiveisEstoqueECategoriasParaDashboard() {
+
+        // Arrange
+        Categoria figuras = persistirCategoria("Figuras Dashboard");
+        Categoria jogos = persistirCategoria("Jogos Dashboard");
+        Usuario vendedor = persistirUsuario("Vendedor Dashboard", "vend.dash@geekhub.com");
+
+        persistirAnuncio("Naruto", BigDecimal.valueOf(200.00), 4, TRUE, NOVO, EXCELENTE, figuras, vendedor);
+        persistirAnuncio("Sasuke", BigDecimal.valueOf(150.00), 0, TRUE, NOVO, EXCELENTE, figuras, vendedor);
+        persistirAnuncio("Kakashi", BigDecimal.valueOf(300.00), 3, FALSE, USADO, BOM, figuras, vendedor);
+        persistirAnuncio("Zelda", BigDecimal.valueOf(250.00), 5, TRUE, NOVO, EXCELENTE, jogos, vendedor);
+
+        entityManager.flush();
+        entityManager.clear();
+
+        // Act
+        Long disponiveis = anuncioRepository.contarDisponiveis();
+        Long unidadesEmEstoque = anuncioRepository.somarUnidadesEmEstoque();
+        List<ResumoCategoriaAnuncioProjection> categorias = anuncioRepository.agruparPorCategoria();
+
+        // Assert
+        assertEquals(2L, disponiveis);
+        assertEquals(12L, unidadesEmEstoque);
+        assertEquals(2, categorias.size());
+        assertEquals("Figuras Dashboard", categorias.getFirst().getCategoriaNome());
+        assertEquals(3L, categorias.getFirst().getQuantidadeAnuncios());
+        assertEquals(7L, categorias.getFirst().getEstoqueTotal());
+        assertEquals("Jogos Dashboard", categorias.getLast().getCategoriaNome());
+        assertEquals(1L, categorias.getLast().getQuantidadeAnuncios());
+        assertEquals(5L, categorias.getLast().getEstoqueTotal());
+    }
+
+    @Test
+    @DisplayName("Deve retornar zero disponíveis, estoque nulo e lista vazia ao agregar sem anúncios")
+    void deveRetornarValoresVaziosAoAgregarSemAnuncios() {
+
+        // Act
+        Long disponiveis = anuncioRepository.contarDisponiveis();
+        Long unidadesEmEstoque = anuncioRepository.somarUnidadesEmEstoque();
+        List<ResumoCategoriaAnuncioProjection> categorias = anuncioRepository.agruparPorCategoria();
+
+        // Assert
+        assertEquals(0L, disponiveis);
+        assertNull(unidadesEmEstoque);
+        assertTrue(categorias.isEmpty());
     }
 
     private Categoria persistirCategoria(String nome) {

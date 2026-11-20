@@ -9,5 +9,7 @@ public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
 
     Boolean existsByNomeIgnoreCase(String nome);
 
+    Long countByAtivaTrue();
+
     Page<Categoria> findByAtiva(Boolean ativa, Pageable pageable);
 }

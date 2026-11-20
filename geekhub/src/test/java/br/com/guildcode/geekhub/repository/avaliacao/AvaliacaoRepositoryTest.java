@@ -79,6 +79,42 @@ class AvaliacaoRepositoryTest {
         assertEquals(0L, quantidadeAvaliacoes);
     }
 
+    @Test
+    @DisplayName("Deve calcular nota média geral considerando avaliações de todos os vendedores")
+    void deveCalcularNotaMediaGeralDeTodosOsVendedores() {
+
+        // Arrange
+        Usuario comprador = persistirUsuario("Comprador Geral", "comp.geral@geekhub.com");
+        Usuario vendedor1 = persistirUsuario("Vendedor Um Geral", "v1.geral@geekhub.com");
+        Usuario vendedor2 = persistirUsuario("Vendedor Dois Geral", "v2.geral@geekhub.com");
+
+        Pedido pedido1 = persistirPedido(comprador);
+        Pedido pedido2 = persistirPedido(comprador);
+
+        persistirAvaliacao(pedido1, comprador, vendedor1, 5);
+        persistirAvaliacao(pedido2, comprador, vendedor2, 4);
+
+        entityManager.flush();
+        entityManager.clear();
+
+        // Act
+        Double notaMediaGeral = avaliacaoRepository.calcularNotaMediaGeral();
+
+        // Assert
+        assertEquals(4.5, notaMediaGeral);
+    }
+
+    @Test
+    @DisplayName("Deve retornar nota média geral nula quando não houver avaliações cadastradas")
+    void deveRetornarNotaMediaGeralNulaQuandoSemAvaliacoes() {
+
+        // Act
+        Double notaMediaGeral = avaliacaoRepository.calcularNotaMediaGeral();
+
+        // Assert
+        assertNull(notaMediaGeral);
+    }
+
     private Usuario persistirUsuario(String nome, String email) {
 
         Usuario usuario = Usuario.builder()

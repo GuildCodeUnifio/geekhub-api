@@ -35,6 +35,26 @@ public interface AnuncioRepository extends JpaRepository<Anuncio, Long> {
     Long contarDisponiveisPorVendedorId(Long vendedorId);
 
     @Query("""
+            SELECT COUNT(a) FROM Anuncio a
+            WHERE a.disponivel = true
+              AND a.quantidadeDisponivel > 0
+            """)
+    Long contarDisponiveis();
+
+    @Query("SELECT SUM(a.quantidadeDisponivel) FROM Anuncio a")
+    Long somarUnidadesEmEstoque();
+
+    @Query("""
+            SELECT a.categoria.nome AS categoriaNome,
+                   COUNT(a) AS quantidadeAnuncios,
+                   SUM(a.quantidadeDisponivel) AS estoqueTotal
+            FROM Anuncio a
+            GROUP BY a.categoria.id, a.categoria.nome
+            ORDER BY COUNT(a) DESC, a.categoria.nome ASC
+            """)
+    List<ResumoCategoriaAnuncioProjection> agruparPorCategoria();
+
+    @Query("""
             SELECT a FROM Anuncio a
             WHERE a.disponivel = true
               AND a.quantidadeDisponivel > 0

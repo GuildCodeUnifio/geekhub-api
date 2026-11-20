@@ -6013,6 +6013,115 @@
           ]
         }
       ]
+    },
+    {
+      "name": "dashboard",
+      "item": [
+        {
+          "name": "Consultar dashboard operacional (ADMIN)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/dashboard",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "dashboard"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 OK (indicadores operacionais retornados)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/dashboard",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "dashboard"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"receitaTotal\": 2922.60,\n  \"ticketMedio\": 584.52,\n  \"totalPedidos\": 6,\n  \"pedidosConcluidos\": 2,\n  \"pedidosEmAndamento\": 3,\n  \"pedidosCancelados\": 1,\n  \"taxaConclusao\": 33,\n  \"totalAnuncios\": 11,\n  \"anunciosDisponiveis\": 10,\n  \"anunciosIndisponiveis\": 1,\n  \"unidadesEmEstoque\": 42,\n  \"totalCategoriasAtivas\": 4,\n  \"notaMediaAvaliacoes\": 5.0,\n  \"totalAvaliacoes\": 2,\n  \"pedidosPorEstado\": [\n    {\n      \"estado\": \"CRIADO\",\n      \"quantidade\": 1,\n      \"percentual\": 17\n    },\n    {\n      \"estado\": \"CONFIRMADO\",\n      \"quantidade\": 1,\n      \"percentual\": 17\n    },\n    {\n      \"estado\": \"ENVIADO\",\n      \"quantidade\": 1,\n      \"percentual\": 17\n    },\n    {\n      \"estado\": \"CONCLUIDO\",\n      \"quantidade\": 2,\n      \"percentual\": 33\n    },\n    {\n      \"estado\": \"CANCELADO\",\n      \"quantidade\": 1,\n      \"percentual\": 17\n    }\n  ],\n  \"anunciosPorCategoria\": [\n    {\n      \"nome\": \"Figuras colecionáveis\",\n      \"quantidadeAnuncios\": 4,\n      \"estoqueTotal\": 12,\n      \"percentual\": 36\n    }\n  ],\n  \"pedidosRecentes\": [\n    {\n      \"id\": 6,\n      \"compradorNome\": \"Usuário GeekHub\",\n      \"estado\": \"CONCLUIDO\",\n      \"valorTotal\": 1850.00,\n      \"quantidadeItens\": 1,\n      \"criadoEm\": \"2026-11-20T18:30:00\"\n    }\n  ]\n}"
+            },
+            {
+              "name": "401 Unauthorized (token ausente ou invalido)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/dashboard",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "dashboard"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": ""
+            },
+            {
+              "name": "403 Forbidden (usuario sem permissao ADMIN)",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/dashboard",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "dashboard"
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"timestamp\": \"2026-11-20T18:30:00.000000\",\n  \"status\": 403,\n  \"erro\": \"Acesso negado: você não possui permissão para realizar esta operação.\"\n}"
+            }
+          ]
+        }
+      ]
     }
   ],
   "variable": [

@@ -76,7 +76,7 @@ Para visualizar a documentação completa (parâmetros, DTOs, autenticação JWT
 - **Swagger UI (interativo)**: `http://localhost:8080/swagger-ui.html`
 - **Contrato OpenAPI JSON**: `http://localhost:8080/v3/api-docs`
 
-Recursos disponíveis: `/login`, `/usuarios`, `/categorias`, `/anuncios`, `/carrinho`, `/pedidos` e `/avaliacoes`.
+Recursos disponíveis: `/login`, `/usuarios`, `/categorias`, `/anuncios`, `/carrinho`, `/pedidos`, `/avaliacoes` e `/dashboard` (`ADMIN`).
 
 ---
 

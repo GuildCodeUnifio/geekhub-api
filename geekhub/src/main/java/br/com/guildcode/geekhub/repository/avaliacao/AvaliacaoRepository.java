@@ -21,4 +21,7 @@ public interface AvaliacaoRepository extends JpaRepository<Avaliacao, Long> {
 
     @Query("SELECT COUNT(a) FROM Avaliacao a WHERE a.vendedor.id = :vendedorId")
     Long contarPorVendedorId(Long vendedorId);
+
+    @Query("SELECT AVG(a.nota) FROM Avaliacao a")
+    Double calcularNotaMediaGeral();
 }
