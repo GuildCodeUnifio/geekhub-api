@@ -6,6 +6,15 @@ O backend gerencia cadastro e autenticação de usuários com JWT RSA, catálogo
 
 ---
 
+## Links Publicados
+
+- **API REST em produção (Render)**: <https://geekhub-api.onrender.com>
+- **Swagger UI (produção)**: <https://geekhub-api.onrender.com/swagger-ui.html>
+- **Health Check**: <https://geekhub-api.onrender.com/actuator/health>
+- **Aplicação web frontend (Vercel)**: <https://geekhub-site.vercel.app>
+
+---
+
 ## Tecnologias
 
 | Camada | Tecnologia |
@@ -77,8 +86,9 @@ O repositório inclui [Dockerfile](Dockerfile) e [render.yaml](render.yaml) conf
 
 Para visualizar a documentação completa (parâmetros, DTOs, autenticação JWT e códigos de resposta), inicie a API e acesse o Swagger (detalhes em [docs/documentacao-api.md](docs/documentacao-api.md)):
 
-- **Swagger UI (interativo)**: `http://localhost:8080/swagger-ui.html`
-- **Contrato OpenAPI JSON**: `http://localhost:8080/v3/api-docs`
+- **Swagger UI (produção)**: <https://geekhub-api.onrender.com/swagger-ui.html>
+- **Swagger UI (local)**: `http://localhost:8080/swagger-ui.html`
+- **Contrato OpenAPI JSON (produção / local)**: <https://geekhub-api.onrender.com/v3/api-docs> · `http://localhost:8080/v3/api-docs`
 
 Recursos disponíveis: `/login`, `/usuarios`, `/categorias`, `/anuncios`, `/carrinho`, `/pedidos`, `/avaliacoes` e `/dashboard` (`ADMIN`).
 
