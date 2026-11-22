@@ -1,0 +1,6 @@
+.git
+.devcontainer
+docs
+postman
+geekhub/target
+*.md

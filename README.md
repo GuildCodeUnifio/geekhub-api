@@ -47,6 +47,10 @@ O backend gerencia cadastro e autenticação de usuários com JWT RSA, catálogo
 
 A API inicia em `http://localhost:8080`. Em desenvolvimento, o `FlywayConfig` limpa o banco e reaplica as migrations `V1` e `V2` a cada inicialização.
 
+### Opção 3: Deploy em Nuvem (Render Free)
+
+O repositório inclui [Dockerfile](Dockerfile) e [render.yaml](render.yaml) configurados com o profile `render` (`geekhub/src/main/resources/application-render.properties`), que sobe a aplicação com banco H2 em memória no modo MySQL (`MODE=MySQL`) e executa automaticamente as migrations `V1` e `V2` do Flyway a cada inicialização. Basta criar um **Blueprint** ou **Web Service (Docker)** no Render apontando para este repositório.
+
 ---
 
 ## Usuários Iniciais (Migrations `V1` e `V2`)
